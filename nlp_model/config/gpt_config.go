@@ -25,19 +25,14 @@ type GptConfig struct {
 		UseProxy bool   `mapstructure:"use_proxy"`
 		ProxyUrl string `mapstructure:"proxy_url"`
 	}
-	//角色扮演的一些配置，使用的不是gpt3.5模型
-	Identity struct {
-		UseIdentity bool   `mapstructure:"use_identity"`
-		Prompt      string `mapstructure:"prompt"`
-	}
 }
 
 var GPTCfg GptConfig
 
 func InitGPTConfig() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
-	if _, err := os.Stat("nlp_model/gpt_config.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("nlp_model/gpt_config.cfg")
+	if _, err := os.Stat("nlp_model/gpt_config.example.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("nlp_model/gpt_config.example.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -66,12 +61,7 @@ func InitGPTConfig() {
 			"# openai是否走代理，默认关闭\n" +
 			"use_proxy = false\n" +
 			"# 代理地址\n" +
-			"proxy_url = \"http://127.0.0.1:7890\"\n\n" +
-			"# 角色信息配置\n[identity]\n" +
-			"# 角色预设功能，默认关闭\n" +
-			"use_identity = false\n" +
-			"# 角色预设信息(设定可以参考：https://github.com/easydu2002/chat_gpt_oicq/wiki/设定AI人格---以猫娘为案例【chatGPT猫娘】）\n" +
-			"prompt = \"（你扮演的角色名称）:你要求AI扮演的角色信息\\n（AI扮演的角色名称）:AI的回应\"\n\n"))
+			"proxy_url = \"http://127.0.0.1:7890\"\n\n"))
 		if err != nil {
 			log.Println(err)
 		}
@@ -79,7 +69,7 @@ func InitGPTConfig() {
 		time.Sleep(5 * time.Second)
 		os.Exit(0)
 	}
-	viper.SetConfigName("gpt_config.cfg")
+	viper.SetConfigName("gpt_config.example.cfg")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath("./nlp_model") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
