@@ -10,7 +10,8 @@ type Messages struct {
 // 对话使用的Request body
 type postData struct {
 	Model            string             `json:"model"`
-	Messages         []Messages         `json:"messages"`
+	Messages         []Messages         `json:"messages"` //message依靠传入信息获取
+	Role             string             `json:"role"`     //角色信息依靠获取用户名来完成，和message一起传入NLP模块。
 	MaxTokens        int                `json:"max_tokens"`
 	Temperature      float64            `json:"temperature"`
 	TopP             float32            `json:"top_p"`
@@ -35,4 +36,8 @@ type OpenAiRcv struct {
 		CompletionTokes int `json:"completion_tokens"`
 		TotalTokens     int `json:"total_tokens"`
 	}
+}
+
+func GenerateText() {
+
 }

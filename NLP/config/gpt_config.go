@@ -15,7 +15,7 @@ type GptConfig struct {
 		Temperature      float32            //对话温度
 		TopP             float32            `mapstructure:"top_p"`             //代替温度采样的方法，称为核采样
 		MaxTokens        int                `mapstructure:"max_tokens"`        //限制生成token使用
-		Stop             []string           `mapstructure:"stop"`              //应该是生成停止标志？
+		Stop             []string           `mapstructure:"stop"`              //应该是生成停止标志？感觉加了这个每句话都可以附上个heart啥的。
 		PresencePenalty  float32            `mapstructure:"presence_penalty"`  //-2.0和2.0之间的数字。正值会根据到目前为止是否出现在文本中来惩罚新标记，从而增加模型谈论新主题的可能性。 by google
 		FrequencyPenalty float32            `mapstructure:"frequency_penalty"` //-2.0和2.0之间的数字。正值会根据新标记在文本中的现有频率对其进行惩罚，从而降低模型逐字重复同一行的可能性。 by google
 		LogitBias        map[string]float32 `mapstructure:"logit_bias"`        //不懂，默认为nil
@@ -31,8 +31,8 @@ var GPTCfg GptConfig
 
 func InitGPTConfig() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
-	if _, err := os.Stat("nlp_model/gpt_config.example.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("nlp_model/gpt_config.example.cfg")
+	if _, err := os.Stat("NLP/gpt_config.example.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("NLP/gpt_config.example.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -71,7 +71,7 @@ func InitGPTConfig() {
 	}
 	viper.SetConfigName("gpt_config.example.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./nlp_model") // 指定查找配置文件的路径
+	viper.AddConfigPath("./NLP") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read config failed: %v", err)
