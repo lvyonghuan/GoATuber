@@ -20,11 +20,6 @@ type GptConfig struct {
 		FrequencyPenalty float32            `mapstructure:"frequency_penalty"` //-2.0和2.0之间的数字。正值会根据新标记在文本中的现有频率对其进行惩罚，从而降低模型逐字重复同一行的可能性。 by google
 		LogitBias        map[string]float32 `mapstructure:"logit_bias"`        //不懂，默认为nil
 	}
-	//代理配置
-	Proxy struct {
-		UseProxy bool   `mapstructure:"use_proxy"`
-		ProxyUrl string `mapstructure:"proxy_url"`
-	}
 }
 
 var GPTCfg GptConfig
@@ -55,12 +50,7 @@ func InitGPTConfig() {
 			"# -2.0和2.0之间的数字。正值会根据新标记在文本中的现有频率对其进行惩罚，从而降低模型逐字重复同一行的可能性。默认为0。\n" +
 			"frequency_penalty = 0\n" +
 			"# 不懂，默认为nil\n" +
-			"logit_bias = nil\n\n" +
-			"# 代理设置\n[proxy]\n" +
-			"# openai是否走代理，默认关闭\n" +
-			"use_proxy = false\n" +
-			"# 代理地址\n" +
-			"proxy_url = \"http://127.0.0.1:7890\"\n\n"))
+			"logit_bias = nil\n\n"))
 		if err != nil {
 			log.Println(err)
 		}
