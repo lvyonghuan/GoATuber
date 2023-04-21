@@ -2,6 +2,13 @@ syntax = "proto3";
 package proto;
 option go_package=".";
 
-message Request{
+import "google/protobuf/timestamp.proto";
+
+message NLP_Request{
+  google.protobuf.Timestamp time=1;
+  
+}
+
+message NLP_Response{
 
 }

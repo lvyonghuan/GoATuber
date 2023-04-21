@@ -1,0 +1,2 @@
+- 本来打算用现成的，不太懂Python，就自己造了
+- 参考 [Hami-Lemon/bilichat](https://github.com/Hami-Lemon/bilichat) 。

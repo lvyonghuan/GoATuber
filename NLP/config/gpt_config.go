@@ -30,9 +30,8 @@ type GptConfig struct {
 var GPTCfg GptConfig
 
 func InitGPTConfig() {
-	log.SetFlags(log.Lshortfile | log.LstdFlags)
-	if _, err := os.Stat("NLP/gpt_config.example.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("NLP/gpt_config.example.cfg")
+	if _, err := os.Stat("NLP/gpt_config.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("NLP/gpt_config.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -69,7 +68,7 @@ func InitGPTConfig() {
 		time.Sleep(5 * time.Second)
 		os.Exit(0)
 	}
-	viper.SetConfigName("gpt_config.example.cfg")
+	viper.SetConfigName("gpt_config.cfg")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath("./NLP") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
