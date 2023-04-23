@@ -1,10 +1,11 @@
 package config
 
 import (
-	"github.com/spf13/viper"
 	"log"
 	"os"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 type GptConfig struct {
@@ -25,13 +26,13 @@ type GptConfig struct {
 var GPTCfg GptConfig
 
 func InitGPTConfig() {
-	if _, err := os.Stat("NLP/gpt_config.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("NLP/gpt_config.cfg")
+	if _, err := os.Stat("NLP/config.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("NLP/config.cfg")
 		if err != nil {
 			log.Println(err)
 		}
 		// 自动生成配置文件
-		_, err = f.Write([]byte("# config.toml 配置文件\n\n" +
+		_, err = f.Write([]byte("# frontend.toml 配置文件\n\n" +
 			"# openai配置\n[openai]\n" +
 			"# 你的 OpenAI API Key, 可以在 https://beta.openai.com/account/api-keys 获取\n" +
 			"api_key = \"sk-xxxxxx\"\n" +
@@ -58,15 +59,15 @@ func InitGPTConfig() {
 		time.Sleep(5 * time.Second)
 		os.Exit(0)
 	}
-	viper.SetConfigName("gpt_config.cfg")
+	viper.SetConfigName("config.cfg")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath("./NLP") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatalf("read config failed: %v", err)
+		log.Fatalf("read frontend failed: %v", err)
 	}
 	err = viper.Unmarshal(&GPTCfg)
 	if err != nil {
-		log.Fatalf("unmarshal config failed: %v", err)
+		log.Fatalf("unmarshal frontend failed: %v", err)
 	}
 }
