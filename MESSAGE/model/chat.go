@@ -1,14 +1,10 @@
 package model
 
-// Chat 弹幕消息结构体
+// Chat 弹幕（聊天）消息结构体
 type Chat struct {
 	TimeStamp int64   //弹幕读取到的时间
 	ChatName  string  //弹幕发送者名称
-	message   string  //弹幕内容
+	Message   string  //弹幕内容
 	Price     float32 //sc
-}
-
-type Room struct {
-	RoomID     int //房间号
-	RealRoomID int //真的房间号
+	Uid       int     //B站用户uid，不知道油管有没有
 }

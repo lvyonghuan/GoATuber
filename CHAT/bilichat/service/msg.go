@@ -1,9 +1,10 @@
 package service
 
 import (
-	"github.com/tidwall/gjson"
 	"strings"
 	"time"
+
+	"github.com/tidwall/gjson"
 )
 
 type Message interface {

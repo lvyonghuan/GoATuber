@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"compress/zlib"
 	"encoding/binary"
-	"github.com/andybalholm/brotli"
 	"io"
+
+	"github.com/andybalholm/brotli"
 )
 
 // 数据解包，分离出头部的信息和数据体，lens为数据包长度，ver为数据类型，op为操作码

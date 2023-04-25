@@ -1,6 +1,7 @@
 package service
 
 import (
+	"GoTuber/CHAT/model"
 	"bytes"
 	"compress/flate"
 	"compress/gzip"
@@ -9,8 +10,6 @@ import (
 	"io"
 	"net/http"
 	"strconv"
-
-	"GoTuber/CHAT/bilichat/model"
 
 	"github.com/andybalholm/brotli"
 	"github.com/tidwall/gjson"

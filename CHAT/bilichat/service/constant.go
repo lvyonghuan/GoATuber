@@ -13,7 +13,7 @@ const (
 	opHeartbeat      = 2 //发送心跳包
 	opHeartbeatReply = 3 //服务端回应心跳包
 	opMessage        = 5 //弹幕消息等
-	opEnterRoom      = 7 //进入直播间
+	opEnterRoom      = 7 //认证包
 	opEnterRoomReply = 8 //进入直播间成功
 )
 

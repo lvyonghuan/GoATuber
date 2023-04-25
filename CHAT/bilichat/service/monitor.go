@@ -2,13 +2,11 @@ package service
 
 import (
 	config2 "GoTuber/CHAT/config"
+	"GoTuber/MESSAGE"
+	"GoTuber/MESSAGE/model"
 	"log"
 	"sync"
 	"time"
-)
-
-const (
-	danMuMsgBufCap = 256
 )
 
 type Monitor struct {
@@ -40,7 +38,13 @@ func work(chat *ChatServer, group *sync.WaitGroup) {
 		}
 		switch m := msg.(type) {
 		case *DanMuMessage:
-			log.Println(m)
+			chat := model.Chat{
+				TimeStamp: m.Timestamp,
+				ChatName:  m.Uname,
+				Price:     0,
+				Message:   m.Text,
+			}
+			MESSAGE.ChatToFilter <- chat
 			//case *SuperChatMessage:
 			//
 			//case *GiftMessage:
@@ -69,7 +73,6 @@ func (m *Monitor) Start() {
 }
 
 func (m *Monitor) Stop() {
-	log.Println("程序退出...")
 	for _, c := range m.servers {
 		c.Disconnect()
 	}
