@@ -1,13 +1,11 @@
-package main
+package CHAT
 
 import (
 	"GoTuber/CHAT/bilichat"
 	config2 "GoTuber/CHAT/config"
-	"GoTuber/MESSAGE"
 )
 
-func main() {
-	go MESSAGE.GetMessage()
+func InitChat() {
 	config2.InitCHATConfig()
 	if config2.ChatCfg.Select.Bilibili {
 		bilichat.InitBiliChat()

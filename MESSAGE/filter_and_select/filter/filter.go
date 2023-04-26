@@ -1,37 +1,24 @@
 package sensitive
 
 import (
-	"GoTuber/MESSAGE/model"
 	"bufio"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"regexp"
 	"time"
 )
 
-func FILTER(msg model.Chat) {
-	filter := New()
-	err := filter.LoadWordDict("MESSAGE/filter_and_select/filter/dict/dict.txt")
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	isValid, word := filter.trie.Validate(msg.Message)
-	log.Println(isValid, word)
-}
-
 // Filter 敏感词过滤器
 type Filter struct {
-	trie  *Trie
+	Trie  *Trie
 	noise *regexp.Regexp
 }
 
 // New 返回一个敏感词过滤器
 func New() *Filter {
 	return &Filter{
-		trie:  NewTrie(),
+		Trie:  NewTrie(),
 		noise: regexp.MustCompile(`[\|\s&%$@*]+`),
 	}
 }
@@ -77,7 +64,7 @@ func (filter *Filter) Load(rd io.Reader) error {
 			}
 			break
 		}
-		filter.trie.Add(string(line))
+		filter.Trie.Add(string(line))
 	}
 
 	return nil
@@ -86,7 +73,7 @@ func (filter *Filter) Load(rd io.Reader) error {
 // Validate 检测字符串是否合法
 func (filter *Filter) Validate(text string) (bool, string) {
 	text = filter.RemoveNoise(text)
-	return filter.trie.Validate(text)
+	return filter.Trie.Validate(text)
 }
 
 // RemoveNoise 去除空格等噪音
