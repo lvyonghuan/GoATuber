@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 const Openaiapiurl1 = "https://api.openai.com/v1/chat/completions" //对话使用的url
@@ -17,7 +18,6 @@ const Openaiapiurl1 = "https://api.openai.com/v1/chat/completions" //对话使�
 type Messages struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
-	Name    string `json:"name"`
 }
 
 // 对话使用的Request body
@@ -56,7 +56,6 @@ func GenerateText(msg *model2.Msg) {
 	messages := &Messages{
 		Role:    "user",
 		Content: msg.Msg,
-		Name:    msg.Name,
 	}
 	ms = append(ms, *messages)
 	postDataTemp := postData{
@@ -105,5 +104,6 @@ func GenerateText(msg *model2.Msg) {
 	openAiRcv.Choices[0].Message.Content = strings.Replace(openAiRcv.Choices[0].Message.Content, "\n\n", "\n", 1)
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
 	log.Println(openAiRcv.Choices[0].Message.Content)
+	time.Sleep(20 * time.Second)
 	return
 }

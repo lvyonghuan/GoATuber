@@ -32,9 +32,9 @@ func InitCHATConfig() {
 		_, err = f.Write([]byte("# frontend.toml 配置文件\n\n" +
 			"# 直播平台设置\n[select]\n" +
 			"# B站（默认使用B站）\n" +
-			"bilibili = \"1\"\n" +
+			"bilibili = true\n" +
 			"# YouTube（暂不考虑）\n" +
-			"YouTube = \"0\"\n\n" +
+			"YouTube = false\n\n" +
 			"# bilibili直播间信息配置\n[bilibili]\n" +
 			"room_id = 114514\n\n"))
 		if err != nil {

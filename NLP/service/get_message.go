@@ -34,10 +34,14 @@ func GetMessageFromChat(msg model.Chat) {
 		normalMsgList.PushBack(&msg)
 		norMu.Unlock()
 	}
-	select {
-	case <-ReadToGetFlag:
-		GetToChooseFlag <- true
-	}
+	go func() {
+		for {
+			select {
+			case <-ReadToGetFlag:
+				GetToChooseFlag <- true
+			}
+		}
+	}()
 }
 
 // ChooseMessage 消息选择器

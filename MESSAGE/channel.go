@@ -5,7 +5,7 @@ import (
 	"GoTuber/NLP/service"
 )
 
-var ChatToFilter = make(chan model.Chat, 2) //要是出问题了就改大，但是应该没问题了
+var ChatToFilter = make(chan model.Chat, 50) //在洁宝直播间做了测试，评价是不如改大
 var FilterToNLP = make(chan model.Chat, 1)
 
 func GetMessage() {
