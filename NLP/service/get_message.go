@@ -1,25 +1,23 @@
 package service
 
 import (
-	"GoTuber/MESSAGE/model"
 	"container/list"
-	"log"
 	"sync"
 	"time"
+
+	"GoTuber/MESSAGE/model"
+	"GoTuber/NLP/config"
+	model2 "GoTuber/NLP/model"
+	"GoTuber/NLP/service/gpt"
 )
 
-type Msg struct {
-	Msg   string
-	Name  string
-	IsUse bool
-	Mu    sync.Mutex
-}
-
-var HandelMsg Msg
+var HandelMsg model2.Msg
 var scMsgList list.List     //氪金消息队列
 var normalMsgList list.List //普通消息队列，定长，队首自动弹出
 var scMu sync.Mutex         //氪金消息锁
 var norMu sync.Mutex        //普通消息锁
+
+//使用三个管道进行循环通信，控制流程，减少性能消耗。
 
 var GetToChooseFlag = make(chan bool, 1)
 var ChooseToReadFlag = make(chan bool, 1)
@@ -44,8 +42,6 @@ func GetMessageFromChat(msg model.Chat) {
 
 // ChooseMessage 消息选择器
 func ChooseMessage() {
-	//TODO:用户手动调整sleep时间
-	log.Println("start!")
 	go func() {
 		for {
 			if normalMsgList.Len() > 5 {
@@ -89,14 +85,16 @@ func ChooseMessage() {
 	}
 }
 
-// Read test
-func Read() {
+func HandelMessage() {
 	for {
 		select {
 		case <-ChooseToReadFlag:
 			if HandelMsg.IsUse {
-				time.Sleep(time.Second * 5)
-				log.Println(HandelMsg.Name, HandelMsg.Msg)
+				if config.NLPCfg.NLP.UseGPT {
+					gpt.GenerateText(&HandelMsg)
+				} else if config.NLPCfg.NLP.UseOther {
+					//TODO：以后再说
+				}
 				HandelMsg.Mu.Lock()
 				HandelMsg.IsUse = false
 				HandelMsg.Mu.Unlock()

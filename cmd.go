@@ -4,6 +4,7 @@ import (
 	"GoTuber/CHAT"
 	"GoTuber/MESSAGE"
 	"GoTuber/NLP"
+	"GoTuber/proxy"
 	"log"
 	"os"
 	"runtime/pprof"
@@ -20,7 +21,9 @@ func main() {
 		log.Fatal(err)
 	}
 
+	log.Println("Go!")
 	go MESSAGE.GetMessage()
+	proxy.InitProxyConfig()
 	NLP.InitNLP()
 	CHAT.InitChat()
 

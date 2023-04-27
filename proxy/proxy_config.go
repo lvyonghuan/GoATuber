@@ -15,9 +15,9 @@ type Proxy struct {
 
 var Cfg Proxy
 
-func InitCHATConfig() {
-	if _, err := os.Stat("proxy/config.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("proxy/config.cfg")
+func InitProxyConfig() {
+	if _, err := os.Stat("proxy/proxyConfig.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("proxy/proxyConfig.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -35,7 +35,7 @@ func InitCHATConfig() {
 		time.Sleep(5 * time.Second)
 		os.Exit(0)
 	}
-	viper.SetConfigName("config.cfg")
+	viper.SetConfigName("proxyConfig.cfg")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath("./proxy") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
