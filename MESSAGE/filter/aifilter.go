@@ -24,7 +24,7 @@ func (OutPut) AIFilter(Msg *OutPut) {
 	isValid, _ := filter.Trie.Validate(msg)
 	if !isValid {
 		log.Println("filter!")
-		msg = "filter!"
+		Msg.Msg = "filter!"
 		return
 	}
 }

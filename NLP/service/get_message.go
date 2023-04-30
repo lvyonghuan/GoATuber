@@ -82,6 +82,8 @@ func ChooseMessage() {
 					norMu.Unlock()
 					ChooseToReadFlag <- true
 					continue
+				} else {
+					GetToChooseFlag <- true //没弹幕的时候，防止管道堵塞
 				}
 			}
 		}

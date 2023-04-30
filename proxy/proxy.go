@@ -7,11 +7,11 @@ import (
 )
 
 func Client() (http.Client, error) {
-	if Cfg.proxy.UseProxy == false {
+	if Cfg.Proxy.UseProxy == false {
 		return http.Client{}, nil
 	}
 	// 设置clash代理
-	uri, err := url.Parse(Cfg.proxy.ProxyUrl)
+	uri, err := url.Parse(Cfg.Proxy.ProxyUrl)
 	if err != nil {
 		log.Fatal(err)
 		return http.Client{}, nil
