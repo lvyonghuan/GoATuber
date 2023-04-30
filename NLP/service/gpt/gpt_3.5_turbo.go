@@ -4,6 +4,7 @@ import (
 	sensitive "GoTuber/MESSAGE/filter"
 	"GoTuber/MOOD"
 	"GoTuber/SPEECH/service"
+	"GoTuber/frontend/websocket"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -110,8 +111,9 @@ func GenerateText(msg *model.Msg) {
 	var Msg sensitive.OutPut
 	Msg.Msg = openAiRcv.Choices[0].Message.Content
 	Msg.AIFilter(&Msg)
-	go MOOD.GetMessage(Msg)
-	service.GetMessage(Msg)
+	MOOD.GetMessage(&Msg)
+	service.GetMessage(&Msg)
+	websocket.GetMessage(&Msg)
 	time.Sleep(20 * time.Second)
 	return
 }

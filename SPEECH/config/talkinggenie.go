@@ -9,9 +9,9 @@ import (
 
 type Talkinggenie struct {
 	Talkinggenie struct {
-		Speed   int    `mapstructure:"speed"`   //语速，值和语速成正比
-		Volume  int    `mapstructure:"volume"`  //声音大小
-		VoiceId string `mapstructure:"voiceId"` //发音类型，参考https://czyt.tech/post/a-free-tts-api/
+		Speed   float64 `mapstructure:"speed"`   //语速，值和语速成正比
+		Volume  float64 `mapstructure:"volume"`  //声音大小
+		VoiceId string  `mapstructure:"voiceId"` //发音类型，参考https://czyt.tech/post/a-free-tts-api/
 	}
 }
 

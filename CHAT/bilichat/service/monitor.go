@@ -65,6 +65,7 @@ func (m *Monitor) Start() {
 			err := c.Connect()
 			if err != nil {
 				log.Println("连接直播间失败:", err, ",尝试重连,连接次数：", i)
+				time.Sleep(1 * time.Second)
 				continue
 			}
 			break

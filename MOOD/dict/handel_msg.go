@@ -11,7 +11,7 @@ var searchMessage = make(chan string, 1)
 var getWords = make(chan []string, 1)
 
 // HandelMsg 处理消息
-func HandelMsg(Msg sensitive.OutPut) {
+func HandelMsg(Msg *sensitive.OutPut) {
 	msg := Msg.Msg
 	search := sensitive.New()
 	err := search.LoadWordDict("MOOD/dict/情感词汇本体.txt", 0) //捏麻的，别问我为什么要用两次AC自动机
@@ -61,7 +61,10 @@ func HandelMsg(Msg sensitive.OutPut) {
 	moodNum[5] = float64(mood.Fear)
 	moodNum[6] = float64(mood.Health)
 	maxMood := max(moodNum)
-	log.Println(maxMood, "happy:", moodNum[0], "mad:", moodNum[1], "sad:", moodNum[2], "disgust:", moodNum[3], "surprise:", moodNum[4], "fear:", moodNum[5], "health:", moodNum[6])
+	//log.Println(maxMood, "happy:", moodNum[0], "mad:", moodNum[1], "sad:", moodNum[2], "disgust:", moodNum[3], "surprise:", moodNum[4], "fear:", moodNum[5], "health:", moodNum[6])
+	Msg.Mu.Lock()
+	Msg.Mood = maxMood
+	Msg.Mu.Unlock()
 }
 
 func Search() {

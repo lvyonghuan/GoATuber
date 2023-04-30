@@ -5,6 +5,6 @@ import (
 	dictMOOD "GoTuber/MOOD/dict"
 )
 
-func GetMessage(msg sensitive.OutPut) {
+func GetMessage(msg *sensitive.OutPut) {
 	dictMOOD.HandelMsg(msg)
 }
