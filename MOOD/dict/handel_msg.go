@@ -2,9 +2,7 @@ package dictMOOD
 
 import (
 	sensitive "GoTuber/MESSAGE/filter"
-	"fmt"
 	"log"
-	"reflect"
 	"strconv"
 	"strings"
 )
@@ -25,8 +23,7 @@ func HandelMsg(Msg sensitive.OutPut) {
 	moodWords := <-getWords
 	var mood Mood
 	for _, moodWord := range moodWords {
-		_, moodWord = search.Validate(moodWord)
-
+		moodWord = search.SearchLine(moodWord)
 		words := strings.Split(moodWord, ",")
 		for i, word := range words {
 			if i == 1 || i == 3 {
@@ -55,15 +52,16 @@ func HandelMsg(Msg sensitive.OutPut) {
 			}
 		}
 	}
-	sum := mood.Happy + mood.Mad + mood.Sad + mood.Disgust + mood.Surprise + mood.Fear + mood.Health
-	happy := mood.Happy / sum
-	mad := mood.Mad / sum
-	disgust := mood.Disgust / sum
-	surprise := mood.Surprise / sum
-	fear := mood.Fear / sum
-	health := mood.Health / sum
-	maxMood := max(happy, mad, disgust, surprise, fear, health)
-	log.Println(maxMood, "happy:", happy, "mad:", mad, "disgust:", disgust, "surprise:", surprise, "fear:", fear, "health:", health)
+	var moodNum [7]float64
+	moodNum[0] = float64(mood.Happy)
+	moodNum[1] = float64(mood.Mad)
+	moodNum[2] = float64(mood.Sad)
+	moodNum[3] = float64(mood.Disgust)
+	moodNum[4] = float64(mood.Surprise)
+	moodNum[5] = float64(mood.Fear)
+	moodNum[6] = float64(mood.Health)
+	maxMood := max(moodNum)
+	log.Println(maxMood, "happy:", moodNum[0], "mad:", moodNum[1], "sad:", moodNum[2], "disgust:", moodNum[3], "surprise:", moodNum[4], "fear:", moodNum[5], "health:", moodNum[6])
 }
 
 func Search() {
@@ -82,14 +80,29 @@ func Search() {
 	}
 }
 
-func max(vars ...interface{}) string {
-	max := vars[0]
-	varName := ""
-	for _, v := range vars {
-		if v.(float64) > max.(float64) {
-			max = v
-			varName = fmt.Sprintf("%v", reflect.TypeOf(v))
+func max(moodNum [7]float64) string {
+	var max float64
+	var maxFlag int
+	for i := 0; i < 7; i++ {
+		if moodNum[i] > max {
+			max = moodNum[i]
+			maxFlag = i
 		}
 	}
-	return varName
+	if maxFlag == 0 {
+		return "happy"
+	} else if maxFlag == 1 {
+		return "mad"
+	} else if maxFlag == 2 {
+		return "sad"
+	} else if maxFlag == 3 {
+		return "disgust"
+	} else if maxFlag == 4 {
+		return "surprise"
+	} else if maxFlag == 5 {
+		return "fear"
+	} else if maxFlag == 6 {
+		return "health"
+	}
+	return ""
 }

@@ -61,10 +61,13 @@ func work(chat *ChatServer, group *sync.WaitGroup) {
 
 func (m *Monitor) Start() {
 	for _, c := range m.servers {
-		err := c.Connect()
-		if err != nil {
-			log.Println("连接直播间失败:", err)
-			return
+		for i := 1; ; i++ {
+			err := c.Connect()
+			if err != nil {
+				log.Println("连接直播间失败:", err, ",尝试重连,连接次数：", i)
+				continue
+			}
+			break
 		}
 		m.group.Add(1)
 		go work(c, &(m.group))

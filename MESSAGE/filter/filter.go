@@ -91,3 +91,7 @@ func (filter *Filter) FindAll(text string) []string {
 func (filter *Filter) RemoveNoise(text string) string {
 	return filter.noise.ReplaceAllString(text, "")
 }
+
+func (filter *Filter) SearchLine(text string) string {
+	return filter.Trie.SearchLine(text)
+}

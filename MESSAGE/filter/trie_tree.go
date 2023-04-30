@@ -1,5 +1,9 @@
 package sensitive
 
+import (
+	"strings"
+)
+
 // Trie 短语组成的Trie树.
 type Trie struct {
 	Root *Node
@@ -78,6 +82,39 @@ func (tree *Trie) Validate(text string) (bool, string) {
 	}
 
 	return true, Empty
+}
+
+// SearchLine 按行检索，返回行
+func (tree *Trie) SearchLine(text string) string {
+	var (
+		parent  = tree.Root
+		current *Node
+		runes   = []rune(text)
+		length  = len(runes)
+		found   bool
+	)
+
+	for position := 0; position < length; position++ {
+		current, found = parent.Children[runes[position]]
+		if !found {
+			break
+		}
+		if current.IsPathEnd() && position == length-1 {
+			break
+		}
+		parent = current
+	}
+	var lineBuilder strings.Builder
+	for {
+		lineBuilder.WriteRune(parent.Character)
+		if parent.IsPathEnd() {
+			break
+		}
+		for _, child := range parent.Children {
+			parent = child
+		}
+	}
+	return lineBuilder.String()
 }
 
 // FindAll 找有所有包含在词库中的词
