@@ -7,11 +7,10 @@ import (
 
 	"GoTuber/MESSAGE/model"
 	"GoTuber/NLP/config"
-	model2 "GoTuber/NLP/model"
 	"GoTuber/NLP/service/gpt"
 )
 
-var HandelMsg model2.Msg
+var HandelMsg model.Msg
 var scMsgList list.List     //氪金消息队列
 var normalMsgList list.List //普通消息队列，定长，队首自动弹出
 var scMu sync.Mutex         //氪金消息锁

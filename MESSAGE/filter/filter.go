@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -29,14 +30,14 @@ func (filter *Filter) UpdateNoisePattern(pattern string) {
 }
 
 // LoadWordDict 加载敏感词字典
-func (filter *Filter) LoadWordDict(path string) error {
+func (filter *Filter) LoadWordDict(path string, method int) error {
 	f, err := os.Open(path)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 
-	return filter.Load(f)
+	return filter.Load(f, method)
 }
 
 // LoadNetWordDict 加载网络敏感词字典
@@ -50,11 +51,11 @@ func (filter *Filter) LoadNetWordDict(url string) error {
 	}
 	defer rsp.Body.Close()
 
-	return filter.Load(rsp.Body)
+	return filter.Load(rsp.Body, 0)
 }
 
 // Load common method to add words
-func (filter *Filter) Load(rd io.Reader) error {
+func (filter *Filter) Load(rd io.Reader, method int) error {
 	buf := bufio.NewReader(rd)
 	for {
 		line, _, err := buf.ReadLine()
@@ -63,6 +64,11 @@ func (filter *Filter) Load(rd io.Reader) error {
 				return err
 			}
 			break
+		}
+		if method == 1 {
+			words := strings.Split(string(line), ",")
+			temp := words[0]
+			line = []byte(temp)
 		}
 		filter.Trie.Add(string(line))
 	}
@@ -74,6 +80,11 @@ func (filter *Filter) Load(rd io.Reader) error {
 func (filter *Filter) Validate(text string) (bool, string) {
 	text = filter.RemoveNoise(text)
 	return filter.Trie.Validate(text)
+}
+
+// FindAll 找到所有匹配词
+func (filter *Filter) FindAll(text string) []string {
+	return filter.Trie.FindAll(text)
 }
 
 // RemoveNoise 去除空格等噪音

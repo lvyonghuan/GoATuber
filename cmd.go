@@ -1,13 +1,16 @@
 package main
 
 import (
-	"GoTuber/CHAT"
-	"GoTuber/MESSAGE"
-	"GoTuber/NLP"
-	"GoTuber/proxy"
+	"GoTuber/MOOD"
 	"log"
 	"os"
 	"runtime/pprof"
+
+	"GoTuber/CHAT"
+	"GoTuber/MESSAGE"
+	"GoTuber/NLP"
+	"GoTuber/SPEECH"
+	"GoTuber/proxy"
 )
 
 func main() {
@@ -25,6 +28,8 @@ func main() {
 	go MESSAGE.GetMessage()
 	proxy.InitProxyConfig()
 	NLP.InitNLP()
+	SPEECH.InitSPEECH()
+	go MOOD.InitMOOD()
 	CHAT.InitChat()
 
 	pprof.StopCPUProfile()
