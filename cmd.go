@@ -2,6 +2,7 @@ package main
 
 import (
 	"GoTuber/MOOD"
+	"GoTuber/frontend/backend"
 	"log"
 	"os"
 	"runtime/pprof"
@@ -30,6 +31,7 @@ func main() {
 	NLP.InitNLP()
 	SPEECH.InitSPEECH()
 	go MOOD.InitMOOD()
+	go backend.Init()
 	CHAT.InitChat()
 
 	pprof.StopCPUProfile()

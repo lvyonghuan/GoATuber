@@ -9,8 +9,10 @@ import (
 )
 
 type Proxy struct {
-	UseProxy bool   `mapstructure:"use_proxy"`
-	ProxyUrl string `mapstructure:"proxy_url"`
+	Proxy struct {
+		UseProxy bool   `mapstructure:"use_proxy"`
+		ProxyUrl string `mapstructure:"proxy_url"`
+	}
 }
 
 var Cfg Proxy

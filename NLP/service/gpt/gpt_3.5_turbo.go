@@ -4,7 +4,7 @@ import (
 	sensitive "GoTuber/MESSAGE/filter"
 	"GoTuber/MOOD"
 	"GoTuber/SPEECH/service"
-	"GoTuber/frontend/websocket"
+	"GoTuber/frontend/backend"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -106,14 +106,14 @@ func GenerateText(msg *model.Msg) {
 		log.Println("OpenAI API调用失败，返回内容：", string(body))
 		return
 	}
-	openAiRcv.Choices[0].Message.Content = strings.Replace(openAiRcv.Choices[0].Message.Content, "\n\n", "\n", 1)
+	openAiRcv.Choices[0].Message.Content = strings.Replace(openAiRcv.Choices[0].Message.Content, "\n\n", "", 1)
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
 	var Msg sensitive.OutPut
 	Msg.Msg = openAiRcv.Choices[0].Message.Content
 	Msg.AIFilter(&Msg)
 	MOOD.GetMessage(&Msg)
 	service.GetMessage(&Msg)
-	websocket.GetMessage(&Msg)
+	backend.GetMessage(&Msg)
 	time.Sleep(20 * time.Second)
 	return
 }
