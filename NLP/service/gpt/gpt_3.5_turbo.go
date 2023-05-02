@@ -5,11 +5,13 @@ import (
 	"GoTuber/MOOD"
 	"GoTuber/SPEECH/service"
 	"GoTuber/frontend/backend"
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -17,6 +19,8 @@ import (
 	"GoTuber/NLP/config"
 	"GoTuber/proxy"
 )
+
+var MS []Messages //向OpenAI传递的消息，包含了用户设定的提示词
 
 const Openaiapiurl1 = "https://api.openai.com/v1/chat/completions" //对话使用的url
 
@@ -54,18 +58,42 @@ type OpenAiRcv struct {
 	}
 }
 
+func InitRole() {
+	file, err := os.Open("./NLP/service/gpt/role.cfg")
+	if err != nil {
+		log.Fatalf("open config file failed: %v", err)
+	}
+	defer file.Close()
+	reader := bufio.NewReader(file)
+	for i := 1; ; i++ {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			break
+		}
+		if i >= 2 {
+			msg := strings.Split(line, ":")
+			ms := &Messages{
+				Role:    msg[0],
+				Content: msg[1],
+			}
+			log.Println(msg[0], msg[1])
+			log.Println(ms)
+			MS = append(MS, *ms)
+		}
+	}
+}
+
 // GenerateText 文本请求
 func GenerateText(msg *model.Msg) {
 	log.Println("正在生成文本......")
-	var ms []Messages
 	messages := &Messages{
 		Role:    "user",
 		Content: msg.Msg,
 	}
-	ms = append(ms, *messages)
+	MS = append(MS, *messages)
 	postDataTemp := postData{
 		Model:            config.GPTCfg.OpenAi.Model,
-		Messages:         ms,
+		Messages:         MS,
 		MaxTokens:        config.GPTCfg.OpenAi.MaxTokens,
 		Temperature:      config.GPTCfg.OpenAi.Temperature,
 		TopP:             config.GPTCfg.OpenAi.TopP,

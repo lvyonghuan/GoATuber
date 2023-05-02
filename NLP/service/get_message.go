@@ -95,9 +95,9 @@ func HandelMessage() {
 		select {
 		case <-ChooseToReadFlag:
 			if HandelMsg.IsUse {
-				if config.NLPCfg.NLP.UseGPT {
+				if config.NLPCfg.Nlp.UseGPT {
 					gpt.GenerateText(&HandelMsg)
-				} else if config.NLPCfg.NLP.UseOther {
+				} else if config.NLPCfg.Nlp.UseOther {
 					//TODO：以后再说
 				}
 				HandelMsg.Mu.Lock()

@@ -9,7 +9,7 @@ import (
 )
 
 type NLPConfig struct {
-	NLP struct {
+	Nlp struct {
 		UseGPT   bool `mapstructure:"use_gpt"`
 		UseOther bool `mapstructure:"use_other"`
 	}
