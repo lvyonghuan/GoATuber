@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+var done = make(chan bool, 1)
+
 var Upgrade = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
@@ -29,6 +31,7 @@ func Start(c *gin.Context) {
 		return
 	}
 	go write(conn)
+	go watch(conn)
 }
 
 func write(conn *websocket.Conn) {
@@ -38,6 +41,7 @@ func write(conn *websocket.Conn) {
 			log.Println(err)
 			return
 		}
+		log.Println("连接断开")
 	}()
 	for {
 		select {
@@ -54,11 +58,13 @@ func write(conn *websocket.Conn) {
 				log.Println(err)
 				continue
 			}
+		case <-done:
+			return
 		}
 	}
 }
 
-func ReadMessage(conn *websocket.Conn) {
+func read(conn *websocket.Conn) {
 	defer func() {
 		err := conn.Close()
 		if err != nil {
@@ -66,5 +72,14 @@ func ReadMessage(conn *websocket.Conn) {
 			return
 		}
 	}()
-	
+}
+
+func watch(conn *websocket.Conn) {
+	for {
+		_, _, err := conn.ReadMessage()
+		if err != nil {
+			done <- true
+			return
+		}
+	}
 }
