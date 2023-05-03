@@ -25,7 +25,7 @@ func Init() {
 	r := gin.Default()
 	//r.LoadHTMLFiles("dist/index.html", "dist/index.html")
 	r.GET("/live2d", Start)
-	r.Use(static.Serve("/start", static.LocalFile("dist", true)))
+	r.Use(static.Serve("/", static.LocalFile("dist", true)))
 	//r.Use(static.Serve("/dist", static.LocalFile("dist", true))) // 添加此行代码
 	r.NoRoute(func(c *gin.Context) {
 		accept := c.Request.Header.Get("Accept")
