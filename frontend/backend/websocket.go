@@ -39,7 +39,7 @@ func Init() {
 			}
 			c.Writer.WriteHeader(200)
 			c.Writer.Header().Add("Accept", "text/html")
-			c.Writer.Write((content))
+			c.Writer.Write(content)
 			c.Writer.Flush()
 		}
 	})

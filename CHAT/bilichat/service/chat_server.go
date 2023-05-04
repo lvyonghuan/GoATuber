@@ -169,7 +169,7 @@ func (c *ChatServer) verify() error {
 
 // HeartBeat 发送心跳包,周期30s（60s不发心跳包，强行断开链接）
 func (c *ChatServer) HeartBeat() {
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 	ping := []byte{0x52, 0x33, 0x52, 0x33, 0x52, 0x33, 0x52, 0x33, 0x52, 0x33, 0x52, 0x33, 0x52, 0x33}
 	err := c.conn.WriteMessage(websocket.BinaryMessage, pack(1, 2, ping))
@@ -185,11 +185,6 @@ func (c *ChatServer) HeartBeat() {
 		}
 	}
 }
-
-//// GetPong 接收pong信息
-//func (c *ChatServer) GetPong() {
-//
-//}
 
 // GetChatServer 获得弹幕服务器地址
 func GetChatServer(roomID int) (*ChatServer, error) {

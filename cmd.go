@@ -3,6 +3,7 @@ package main
 import (
 	"GoTuber/MOOD"
 	"GoTuber/frontend/backend"
+	"GoTuber/frontend/backend/get_live2d_module_info"
 	"log"
 	"os"
 	"runtime/pprof"
@@ -31,6 +32,7 @@ func main() {
 	NLP.InitNLP()
 	SPEECH.InitSPEECH()
 	go MOOD.InitMOOD()
+	get_live2d_module_info.InitLive2DConfig()
 	go backend.Init()
 	CHAT.InitChat()
 
