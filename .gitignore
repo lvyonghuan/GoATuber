@@ -1,1 +1,4 @@
 /profile.pb
+/dist/module/**
+proxy/proxyConfig.cfg
+*.cfg

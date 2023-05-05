@@ -2,9 +2,7 @@ package gpt
 
 import (
 	sensitive "GoTuber/MESSAGE/filter"
-	"GoTuber/MOOD"
-	"GoTuber/SPEECH/service"
-	"GoTuber/frontend/backend"
+	"GoTuber/NLP/service/out"
 	"bufio"
 	"bytes"
 	"encoding/json"
@@ -58,6 +56,7 @@ type OpenAiRcv struct {
 	}
 }
 
+// InitRole 这个函数用于获取role.cfg的角色文本信息
 func InitRole() {
 	file, err := os.Open("./NLP/service/gpt/role.cfg")
 	if err != nil {
@@ -76,8 +75,6 @@ func InitRole() {
 				Role:    msg[0],
 				Content: msg[1],
 			}
-			log.Println(msg[0], msg[1])
-			log.Println(ms)
 			MS = append(MS, *ms)
 		}
 	}
@@ -138,10 +135,7 @@ func GenerateText(msg *model.Msg) {
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
 	var Msg sensitive.OutPut
 	Msg.Msg = openAiRcv.Choices[0].Message.Content
-	Msg.AIFilter(&Msg)
-	MOOD.GetMessage(&Msg)
-	service.GetMessage(&Msg)
-	backend.GetMessage(&Msg)
+	out.PutOutMsg(&Msg)
 	time.Sleep(20 * time.Second)
 	return
 }
