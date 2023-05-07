@@ -100,6 +100,7 @@ func read(conn *websocket.Conn) {
 			continue
 		} else {
 			log.Println("错误代码：", string(i))
+			WebsocketToNLP <- true
 			continue
 		}
 	}
