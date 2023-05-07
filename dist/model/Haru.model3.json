@@ -76,6 +76,12 @@
 				"ParamEyeLOpen",
 				"ParamEyeROpen"
 			]
+		},{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": [
+				"ParamMouthOpenY"
+			]
 		}
 	],
 	"HitAreas": [
