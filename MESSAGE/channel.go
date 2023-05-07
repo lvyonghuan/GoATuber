@@ -7,7 +7,6 @@ import (
 
 var ChatToFilter = make(chan model.Chat, 50) //在洁宝直播间做了测试，评价是不如改大
 var FilterToNLP = make(chan model.Chat, 1)
-var AIFilterToMOOD = make(chan string, 1)
 
 func GetMessage() {
 	for {

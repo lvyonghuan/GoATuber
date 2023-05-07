@@ -1,6 +1,7 @@
 package service
 
 import (
+	"GoTuber/frontend/backend"
 	"container/list"
 	"sync"
 	"time"
@@ -90,21 +91,21 @@ func ChooseMessage() {
 	}
 }
 
+// HandelMessage 将消息传送给具体的处理模块
 func HandelMessage() {
 	for {
-		select {
-		case <-ChooseToReadFlag:
-			if HandelMsg.IsUse {
-				if config.NLPCfg.Nlp.UseGPT {
-					gpt.GenerateText(&HandelMsg)
-				} else if config.NLPCfg.Nlp.UseOther {
-					//TODO：以后再说
-				}
-				HandelMsg.Mu.Lock()
-				HandelMsg.IsUse = false
-				HandelMsg.Mu.Unlock()
-				ReadToGetFlag <- true
+		<-ChooseToReadFlag
+		<-backend.WebsocketToNLP
+		if HandelMsg.IsUse {
+			if config.NLPCfg.Nlp.UseGPT {
+				gpt.GenerateText(&HandelMsg)
+			} else if config.NLPCfg.Nlp.UseOther {
+				//TODO：以后再说
 			}
+			HandelMsg.Mu.Lock()
+			HandelMsg.IsUse = false
+			HandelMsg.Mu.Unlock()
+			ReadToGetFlag <- true
 		}
 	}
 }
