@@ -148,7 +148,7 @@ func (c *ChatServer) verify() error {
 		"key":      c.token,
 	}
 	body, _ := json.Marshal(verifyMsg)
-	err := c.conn.WriteMessage(websocket.BinaryMessage, pack(1, 7, body))
+	err := c.conn.WriteMessage(websocket.BinaryMessage, pack(verInt, opEnterRoom, body))
 	if err != nil {
 		log.Println("发送验证信息失败:", err)
 		return err
@@ -172,13 +172,13 @@ func (c *ChatServer) HeartBeat() {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 	ping := []byte{0x52, 0x33, 0x52, 0x33, 0x52, 0x33, 0x52, 0x33, 0x52, 0x33, 0x52, 0x33, 0x52, 0x33}
-	err := c.conn.WriteMessage(websocket.BinaryMessage, pack(1, 2, ping))
+	err := c.conn.WriteMessage(websocket.BinaryMessage, pack(verInt, opHeartbeat, ping))
 	if err != nil {
 		log.Println("ping err:", err)
 		return
 	}
 	for range ticker.C {
-		err = c.conn.WriteMessage(websocket.BinaryMessage, pack(1, 2, ping))
+		err = c.conn.WriteMessage(websocket.BinaryMessage, pack(verInt, opHeartbeat, ping))
 		if err != nil {
 			log.Println("ping err:", err)
 			return
