@@ -44,6 +44,5 @@ func InitLive2DConfig() {
 	if err != nil {
 		log.Fatalf("unmarshal frontend failed: %v", err)
 	}
-	log.Println(Live2dCfg.Live2d.Name)
 	ReplaceName()
 }

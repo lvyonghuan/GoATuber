@@ -1,17 +1,17 @@
-���live2dģ���Ͻ�����
+﻿请把live2d模型拖进这里
 
-��û��������live2dģ���ļ�������������Ŀǰ�µ�һ��ģ���ļ��������롾ֻ��runtimeĿ¼����Ķ������Ͻ��ļ��С�
+我没见过多少live2d模型文件。不过根据我目前下的一个模型文件来看，请【只把runtime目录里面的东西】拖进文件夹。
 
-��������ģ�͵��ļ���
+这是整个模型的文件夹
 
 ![img.png](../../img/img.png)
 
-��runtime����Ķ������ƻ���г���
+把runtime里面的东西复制或剪切出来
 
 ![img_1.png](../../img/img_1.png)
 
 ![img.png](../../img/img3.png)
 
-��������һĿ¼��
+放置于这一目录下
 
 ![img.png](../../img/img4.png)
