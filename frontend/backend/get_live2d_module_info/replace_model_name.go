@@ -7,7 +7,7 @@ import (
 )
 
 func ReplaceName() {
-	jsBytes, err := os.ReadFile("dist/js/app.4fcda93e.js")
+	jsBytes, err := os.ReadFile("dist/js/app.cca9edb9.js.map")
 	if err != nil {
 		log.Fatal("读取js文件失败，错误信息：", err)
 		return
@@ -23,7 +23,7 @@ func ReplaceName() {
 	}
 	// 将字段替换为你想要的字符串
 	newJsStr := re.ReplaceAllString(jsStr, "this.model4=await a._Y.from(\"./model/"+Live2dCfg.Live2d.Name+".model3.json\"")
-	err = os.WriteFile("dist/js/app.4fcda93e.js", []byte(newJsStr), 0644)
+	err = os.WriteFile("dist/js/app.cca9edb9.js.map", []byte(newJsStr), 0644)
 	if err != nil {
 		log.Fatal("更新js失败，错误信息：", err)
 	}
