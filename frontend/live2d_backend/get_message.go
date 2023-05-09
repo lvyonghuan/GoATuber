@@ -1,4 +1,4 @@
-// Package backend 前后端交互入口：借助websocket进行
+// Package live2d_backend 前后端交互入口：借助websocket进行
 package backend
 
 import (

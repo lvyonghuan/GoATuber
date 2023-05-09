@@ -4,7 +4,7 @@ import (
 	"GoTuber/NLP/config"
 	"GoTuber/NLP/service"
 	"GoTuber/NLP/service/gpt"
-	"GoTuber/frontend/backend"
+	"GoTuber/frontend/live2d_backend"
 )
 
 func InitNLP() {
