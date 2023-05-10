@@ -4,11 +4,12 @@ import (
 	sensitive "GoTuber/MESSAGE/filter"
 	"GoTuber/SPEECH/config"
 	"GoTuber/SPEECH/service/talkinggenie"
+	"GoTuber/SPEECH/service/xfyun"
 )
 
 func GetMessage(msg *sensitive.OutPut) {
 	if config.SpeechCfg.Speech.UseXfyun {
-		//TODO：todo
+		xfyun.GetVoice(msg)
 	} else if config.SpeechCfg.Speech.UseTalkinggenie {
 		talkinggenie.GetVoice(msg)
 	}

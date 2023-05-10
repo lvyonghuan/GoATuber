@@ -9,6 +9,20 @@ import (
 
 type Xfyun struct {
 	Xfyun struct {
+		ApiKey    string `mapstructure:"api_key"`
+		ApiSecret string `mapstructure:"api_secret"`
+		ApiID     string `mapstructure:"api_id"`
+	}
+	XfyunVoice struct {
+		Aue    string `mapstructure:"aue"`    //音频编码
+		Sft    int    `mapstructure:"sft"`    //流式返回
+		Auf    string `mapstructure:"auf"`    //音频采样率
+		Vcn    string `mapstructure:"vcn"`    //发音人
+		Speed  int    `mapstructure:"speed"`  //语速
+		Volume int    `mapstructure:"volume"` //音量
+		Pitch  int    `mapstructure:"pitch"`  //音高
+		Reg    string `mapstructure:"reg"`    //英文发音方式
+		Rdn    string `mapstructure:"rdn"`    //数字发音方式
 	}
 }
 
@@ -22,9 +36,29 @@ func InitXFConfig() {
 		}
 		// 自动生成配置文件
 		_, err = f.Write([]byte("# frontend.toml 配置文件\n\n" +
-			"# 语音模块通用设置\n[speech]\n" +
-			"# 使用科大讯飞语音合成平台（调用在线接口）（目前默认）\n" +
-			"use_xfyun = true \n\n"))
+			"# 讯飞用户配置（待分离）\n[xfyun]\n" +
+			"app_id = \"xxxxxx\"\n" +
+			"api_secret = \"xxxxxx\"\n" +
+			"api_key = \"xxxxxx\"\n" +
+			"# 讯飞语音接口配置\n[xfyunVoice]\n" +
+			"# 音频编码（\n" +
+			"aue = \"lame\" \n" +
+			"# 是否开启流式返回（1开启，0关闭）（配合aue=lame使用）\n" +
+			"sfl = 1\n" +
+			"# 音频采样率(8k或者16k)\n" +
+			"auf = \"audio/L16;rate=16000\"\n" +
+			"# 发音人\n" +
+			"vcn = \"xiaoyan\"\n" +
+			"# 语速(0~100,默认50)\n" +
+			"speed = 50\n" +
+			"# 音量(0~100,默认50)\n" +
+			"volume = 50\n" +
+			"# 音高(0~100,默认50)\n" +
+			"pitch = 50" +
+			"# 英文发音方式\n" +
+			"reg = \"0\"\n" +
+			"# 数字发音方式\n" +
+			"rdn = \"0\"\n\n"))
 		if err != nil {
 			log.Println(err)
 		}
