@@ -12,6 +12,7 @@ var OutPutChan = make(chan OutMessage, 1)
 
 type OutMessage struct {
 	Voice      string `json:"voice"`
+	VType      int    `json:"VType"`      //voice格式type，1表示http，2表示base64编码
 	Act        string `json:"act"`        //数组名称
 	Movement   string `json:"movement"`   //动作，全身的
 	Expression string `json:"expression"` //表情，脸部的
@@ -20,6 +21,7 @@ type OutMessage struct {
 func GetMessage(msg *sensitive.OutPut) {
 	var putOut OutMessage
 	putOut.Voice = msg.Voice
+	putOut.VType = msg.VType
 	rand.Seed(time.Now().UnixNano()) //如果相同情绪有多个动作......摆了，随机选一个
 	if msg.Mood == "happy" {
 		getAction(&putOut, msg.Mood)

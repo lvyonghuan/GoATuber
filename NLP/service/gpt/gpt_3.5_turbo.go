@@ -88,6 +88,7 @@ func GenerateText(msg *model.Msg) {
 		Role:    "user",
 		Content: msg.Msg,
 	}
+	//TODO:我就说为什么模型莫名其妙有记忆功能了，原来如此。那就要完善一下，免得变成token杀手。
 	MS = append(MS, *messages)
 	postDataTemp := postData{
 		Model:            config.GPTCfg.OpenAi.Model,
