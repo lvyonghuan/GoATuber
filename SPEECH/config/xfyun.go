@@ -11,11 +11,11 @@ type Xfyun struct {
 	Xfyun struct {
 		ApiKey    string `mapstructure:"api_key"`
 		ApiSecret string `mapstructure:"api_secret"`
-		ApiID     string `mapstructure:"api_id"`
+		AppID     string `mapstructure:"app_id"`
 	}
 	XfyunVoice struct {
 		Aue    string `mapstructure:"aue"`    //音频编码
-		Sft    int    `mapstructure:"sft"`    //流式返回
+		Sfl    int    `mapstructure:"sfl"`    //流式返回
 		Auf    string `mapstructure:"auf"`    //音频采样率
 		Vcn    string `mapstructure:"vcn"`    //发音人
 		Speed  int    `mapstructure:"speed"`  //语速
@@ -54,7 +54,7 @@ func InitXFConfig() {
 			"# 音量(0~100,默认50)\n" +
 			"volume = 50\n" +
 			"# 音高(0~100,默认50)\n" +
-			"pitch = 50" +
+			"pitch = 50\n" +
 			"# 英文发音方式\n" +
 			"reg = \"0\"\n" +
 			"# 数字发音方式\n" +
@@ -77,4 +77,5 @@ func InitXFConfig() {
 	if err != nil {
 		log.Fatalf("unmarshal frontend failed: %v", err)
 	}
+	log.Println(XFCfg.Xfyun.AppID)
 }

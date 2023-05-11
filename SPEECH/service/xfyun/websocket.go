@@ -20,8 +20,6 @@ func connectXFYun() *websocket.Conn {
 	u := assembleAuthUrl(wsurl, config.XFCfg.Xfyun.ApiKey, config.XFCfg.Xfyun.ApiSecret)
 	dialer := websocket.Dialer{
 		HandshakeTimeout: 5 * time.Second,
-		ReadBufferSize:   1024,
-		WriteBufferSize:  1024,
 	}
 	conn, resp, err := dialer.Dial(u, nil)
 	if err != nil {
