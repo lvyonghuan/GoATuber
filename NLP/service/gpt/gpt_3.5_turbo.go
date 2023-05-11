@@ -3,6 +3,7 @@ package gpt
 import (
 	sensitive "GoTuber/MESSAGE/filter"
 	"GoTuber/NLP/service/out"
+	backend "GoTuber/frontend/live2d_backend"
 	"bufio"
 	"bytes"
 	"encoding/json"
@@ -87,6 +88,7 @@ func GenerateText(msg *model.Msg) {
 		Role:    "user",
 		Content: msg.Msg,
 	}
+	//TODO:我就说为什么模型莫名其妙有记忆功能了，原来如此。那就要完善一下，免得变成token杀手。
 	MS = append(MS, *messages)
 	postDataTemp := postData{
 		Model:            config.GPTCfg.OpenAi.Model,
@@ -100,6 +102,7 @@ func GenerateText(msg *model.Msg) {
 	}
 	postDataBytes, err := json.Marshal(postDataTemp)
 	if err != nil {
+		backend.WebsocketToNLP <- true
 		log.Println(err)
 		return
 	}
@@ -108,15 +111,18 @@ func GenerateText(msg *model.Msg) {
 	req.Header.Set("Authorization", "Bearer "+config.GPTCfg.OpenAi.ApiKey)
 	client, err := proxy.Client()
 	if err != nil {
+		backend.WebsocketToNLP <- true
 		log.Println(err)
 	}
 	resp, err := client.Do(req)
 	if err != nil {
+		backend.WebsocketToNLP <- true
 		log.Println(err)
 		return
 	}
 	defer resp.Body.Close()
 	if resp == nil {
+		backend.WebsocketToNLP <- true
 		log.Println("response is nil")
 		return
 	}
@@ -128,6 +134,7 @@ func GenerateText(msg *model.Msg) {
 		return
 	}
 	if len(openAiRcv.Choices) == 0 {
+		backend.WebsocketToNLP <- true
 		log.Println("OpenAI API调用失败，返回内容：", string(body))
 		return
 	}

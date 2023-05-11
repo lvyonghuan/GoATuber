@@ -1,7 +1,7 @@
 package service
 
 import (
-	"GoTuber/frontend/backend"
+	"GoTuber/frontend/live2d_backend"
 	"container/list"
 	"sync"
 	"time"

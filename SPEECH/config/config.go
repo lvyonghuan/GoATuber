@@ -48,5 +48,9 @@ func InitSPEECHConfig() {
 	if err != nil {
 		log.Fatalf("unmarshal frontend failed: %v", err)
 	}
-	InitTalkinggenieConfig()
+	if SpeechCfg.Speech.UseXfyun {
+		InitXFConfig()
+	} else if SpeechCfg.Speech.UseTalkinggenie {
+		InitTalkinggenieConfig()
+	}
 }

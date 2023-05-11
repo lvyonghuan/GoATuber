@@ -11,12 +11,11 @@ import (
 )
 
 type Mood struct {
-	Type int    //类型，1代表动作，2代表表情
-	Act  string //行为名称
-	Mood string //对应情绪
+	Event string //触发act的事件
+	Act   string //行为名称
 }
 
-var MoodAct []Mood
+var MoodAct = make(map[string][]Mood)
 
 func readMoodAct() {
 	file, err := os.Open("./MOOD/mood.cfg")
@@ -34,15 +33,22 @@ func readMoodAct() {
 			act := strings.Split(line, ",")
 			typ, err := strconv.Atoi(act[0])
 			if err != nil {
-				log.Fatal("获取情感-动作、表情映射类型失败，错误原因：", err)
+				log.Println("获取情感-动作、表情映射类型失败，错误原因：", err)
 				return
 			}
 			mood := &Mood{
-				Type: typ,
-				Act:  act[1],
-				Mood: act[2],
+				Event: act[1],
+				Act:   act[2],
 			}
-			MoodAct = append(MoodAct, *mood)
+			str := strings.Replace(act[3], "\r", strconv.Itoa(typ), 1)
+			str = strings.Replace(str, "\n", "", 1)
+			if typ == 1 {
+				MoodAct[str] = append(MoodAct[str], *mood)
+			} else if typ == 2 {
+				MoodAct[str] = append(MoodAct[str], *mood)
+			} else {
+				log.Println("非法情感行为类型")
+			}
 		}
 	}
 }

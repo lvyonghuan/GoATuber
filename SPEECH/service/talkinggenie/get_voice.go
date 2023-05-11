@@ -13,5 +13,6 @@ func GetVoice(Msg *sensitive.OutPut) {
 	url := "https://dds.dui.ai/runtime/v1/synthesize?voiceId=" + config.TalkinggenieCfg.Talkinggenie.VoiceId + "&text=" + msg + "&speed=" + speed + "&volume=" + volume + "&audioType=wav"
 	Msg.Mu.Lock()
 	Msg.Voice = url
+	Msg.VType = 1
 	Msg.Mu.Unlock()
 }

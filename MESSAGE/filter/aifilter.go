@@ -11,6 +11,7 @@ type OutPut struct {
 	Mu    sync.Mutex
 	Voice string
 	Mood  string
+	VType int //约定：1，http格式;2，base64格式
 }
 
 func (OutPut) AIFilter(Msg *OutPut) {
