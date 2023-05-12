@@ -54,6 +54,7 @@ func GetVoice(text *sensitive.OutPut) {
 		log.Println("向讯飞发送信息错误，错误信息：", err)
 		return
 	}
+	var voice string
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
@@ -64,8 +65,13 @@ func GetVoice(text *sensitive.OutPut) {
 		if err != nil {
 			log.Fatalf("讯飞返回信息格式化失败，错误信息：%v", err)
 		}
+		voice += respMsg.Data.Audio
 		if respMsg.Data.Status == 2 {
 			break
 		}
 	}
+	text.Mu.Lock()
+	text.Voice = voice
+	text.VType = 2
+	text.Mu.Unlock()
 }
