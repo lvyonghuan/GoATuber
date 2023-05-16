@@ -77,5 +77,4 @@ func InitXFConfig() {
 	if err != nil {
 		log.Fatalf("unmarshal frontend failed: %v", err)
 	}
-	log.Println(XFCfg.Xfyun.AppID)
 }

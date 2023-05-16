@@ -11,6 +11,7 @@ type SPEECH struct {
 	Speech struct {
 		UseXfyun        bool `mapstructure:"use_xfyun"`
 		UseTalkinggenie bool `mapstructure:"use_talkinggenie"`
+		UseAzure        bool `mapstructure:"use_azure"`
 	}
 }
 
@@ -29,7 +30,9 @@ func InitSPEECHConfig() {
 			"# 使用科大讯飞语音合成平台（调用在线接口）\n" +
 			"use_xfyun = true \n" +
 			"# 使用会话精灵（非官方api）（调用在线接口）\n" +
-			"use_talkinggenie = false \n"))
+			"use_talkinggenie = false \n" +
+			"# 使用azure\n" +
+			"use_azure = false\n"))
 		if err != nil {
 			log.Println(err)
 		}
@@ -52,5 +55,7 @@ func InitSPEECHConfig() {
 		InitXFConfig()
 	} else if SpeechCfg.Speech.UseTalkinggenie {
 		InitTalkinggenieConfig()
+	} else if SpeechCfg.Speech.UseAzure {
+		InitAzureConfig()
 	}
 }
