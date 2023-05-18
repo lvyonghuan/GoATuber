@@ -45,8 +45,14 @@ func work(chat *ChatServer, group *sync.WaitGroup) {
 				Message:   m.Text,
 			}
 			MESSAGE.ChatToFilter <- chat
-			//case *SuperChatMessage:
-			//
+		case *SuperChatMessage:
+			chat := model.Chat{
+				TimeStamp: m.Timestamp,
+				ChatName:  m.Uname,
+				Price:     0,
+				Message:   m.Text,
+			}
+			MESSAGE.ChatToFilter <- chat
 			//case *GiftMessage:
 			//	ifInsertError(d.insertGiftMsg(*r, m))
 			//case *GuardMessage:
