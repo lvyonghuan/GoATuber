@@ -19,7 +19,8 @@ import (
 	"GoTuber/proxy"
 )
 
-var MS []Messages //向OpenAI传递的消息，包含了用户设定的提示词
+var MS []Messages     //向OpenAI传递的消息，包含了用户设定的提示词
+var roleMS []Messages //角色信息
 
 const Openaiapiurl1 = "https://api.openai.com/v1/chat/completions" //对话使用的url
 
@@ -76,9 +77,10 @@ func InitRole() {
 				Role:    msg[0],
 				Content: msg[1],
 			}
-			MS = append(MS, *ms)
+			roleMS = append(roleMS, *ms)
 		}
 	}
+	MS = append(MS, roleMS...)
 }
 
 // GenerateText 文本请求
@@ -88,7 +90,6 @@ func GenerateText(msg *model.Msg) {
 		Role:    "user",
 		Content: msg.Msg,
 	}
-	//TODO:我就说为什么模型莫名其妙有记忆功能了，原来如此。那就要完善一下，免得变成token杀手。
 	MS = append(MS, *messages)
 	postDataTemp := postData{
 		Model:            config.GPTCfg.OpenAi.Model,
@@ -140,6 +141,11 @@ func GenerateText(msg *model.Msg) {
 	}
 	openAiRcv.Choices[0].Message.Content = strings.Replace(openAiRcv.Choices[0].Message.Content, "\n\n", "", 1)
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
+	//TODO：保留了短期记忆，不过消耗的token超过一个阈值的时候会执行删除。计划由用户设定这个功能。也许可以加入一个比较连续的短期记忆功能。
+	if openAiRcv.Usage.TotalTokens > 1000 {
+		MS = MS[:0]
+		MS = append(MS, roleMS...)
+	}
 	var Msg sensitive.OutPut
 	Msg.Msg = openAiRcv.Choices[0].Message.Content
 	out.PutOutMsg(&Msg)
