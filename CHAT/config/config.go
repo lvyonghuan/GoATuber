@@ -23,8 +23,8 @@ type ChatConfig struct {
 var ChatCfg ChatConfig
 
 func InitCHATConfig() {
-	if _, err := os.Stat("CHAT/config.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("CHAT/config.cfg")
+	if _, err := os.Stat("config/CHAT/config.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("config/CHAT/config.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -46,7 +46,7 @@ func InitCHATConfig() {
 	}
 	viper.SetConfigName("config.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./CHAT") // 指定查找配置文件的路径
+	viper.AddConfigPath("./config/CHAT") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read frontend failed: %v", err)

@@ -18,7 +18,7 @@ type Mood struct {
 var MoodAct = make(map[string][]Mood)
 
 func readMoodAct() {
-	file, err := os.Open("./MOOD/mood.cfg")
+	file, err := os.Open("./config/MOOD/mood.cfg")
 	if err != nil {
 		log.Fatalf("open config file failed: %v", err)
 	}

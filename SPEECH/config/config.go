@@ -19,8 +19,8 @@ var SpeechCfg SPEECH
 
 // InitSPEECHConfig 初始化语音模块配置文件
 func InitSPEECHConfig() {
-	if _, err := os.Stat("SPEECH/config/SpeechConfig.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("SPEECH/config/SpeechConfig.cfg")
+	if _, err := os.Stat("config/SPEECH/SpeechConfig.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("config/SPEECH/SpeechConfig.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -42,7 +42,7 @@ func InitSPEECHConfig() {
 	}
 	viper.SetConfigName("SpeechConfig.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./SPEECH/config") // 指定查找配置文件的路径
+	viper.AddConfigPath("./config/SPEECH") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read frontend failed: %v", err)

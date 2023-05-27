@@ -18,8 +18,8 @@ type Proxy struct {
 var Cfg Proxy
 
 func InitProxyConfig() {
-	if _, err := os.Stat("proxy/proxyConfig.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("proxy/proxyConfig.cfg")
+	if _, err := os.Stat("config/proxy/proxyConfig.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("config/proxy/proxyConfig.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -39,7 +39,7 @@ func InitProxyConfig() {
 	}
 	viper.SetConfigName("proxyConfig.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./proxy") // 指定查找配置文件的路径
+	viper.AddConfigPath("./config/proxy") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read frontend failed: %v", err)
