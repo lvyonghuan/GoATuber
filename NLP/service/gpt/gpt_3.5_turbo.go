@@ -60,7 +60,7 @@ type OpenAiRcv struct {
 
 // InitRole 这个函数用于获取role.cfg的角色文本信息
 func InitRole() {
-	file, err := os.Open("./NLP/service/gpt/role.cfg")
+	file, err := os.Open("./config/NLP/GPTConfig/role.cfg")
 	if err != nil {
 		log.Fatalf("open config file failed: %v", err)
 	}
