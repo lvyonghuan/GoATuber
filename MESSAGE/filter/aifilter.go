@@ -14,7 +14,7 @@ type OutPut struct {
 	VType int //约定：1，http格式;2，base64格式
 }
 
-func (OutPut) AIFilter(Msg *OutPut) {
+func (*OutPut) AIFilter(Msg *OutPut) {
 	msg := Msg.Msg
 	filter := New()
 	err := filter.LoadWordDict("MESSAGE/filter/dict/dict.txt", 0)

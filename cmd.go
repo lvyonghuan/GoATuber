@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GoTuber/MEMORY"
 	"GoTuber/MOOD"
 	"GoTuber/frontend/live2d_backend"
 	"log"
@@ -29,6 +30,7 @@ func main() {
 	go MESSAGE.GetMessage()
 	proxy.InitProxyConfig()
 	NLP.InitNLP()
+	MEMORY.InitMemory()
 	SPEECH.InitSPEECH()
 	go MOOD.InitMOOD()
 	go backend.Init()

@@ -1,6 +1,8 @@
 package gpt
 
 import (
+	"GoTuber/MEMORY"
+	memory_gpt "GoTuber/MEMORY/LLMmodel/gpt"
 	sensitive "GoTuber/MESSAGE/filter"
 	"GoTuber/NLP/service/out"
 	backend "GoTuber/frontend/live2d_backend"
@@ -86,9 +88,24 @@ func InitRole() {
 // GenerateText 文本请求
 func GenerateText(msg *model.Msg) {
 	log.Println("正在生成文本......")
+
+	//记忆相关
+	memory := memory_gpt.Chat{
+		Human: msg.Msg,
+		AI:    "",
+	}
+	if MEMORY.MemoryCfg.IsUse {
+		user, text := memory.GetMemory()
+		mem := Messages{
+			Role:    "system",
+			Content: "你是一个虚拟主播，现在你要回答直播中的弹幕的问题，这是你对这个问题有关的记忆。你可以选择利用这些记忆，也可以选择忽略。以下是记忆部分。" + user + "说，" + text,
+		}
+		MS = append(MS, mem)
+	}
+
 	messages := &Messages{
 		Role:    "user",
-		Content: msg.Msg,
+		Content: msg.Name + "说：" + msg.Msg,
 	}
 	MS = append(MS, *messages)
 	postDataTemp := postData{
@@ -146,6 +163,13 @@ func GenerateText(msg *model.Msg) {
 		MS = MS[:0]
 		MS = append(MS, roleMS...)
 	}
+
+	if MEMORY.MemoryCfg.IsUse {
+		memory.UserName = msg.Name
+		memory.AI = openAiRcv.Choices[0].Message.Content
+		go memory.StoreMessage()
+	}
+
 	var Msg sensitive.OutPut
 	Msg.Msg = openAiRcv.Choices[0].Message.Content
 	out.PutOutMsg(&Msg)
