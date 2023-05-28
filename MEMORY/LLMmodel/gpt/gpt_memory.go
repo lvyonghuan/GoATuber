@@ -12,7 +12,7 @@ type Chat struct {
 }
 
 func (chat Chat) StoreMessage() {
-	doc := pinecone.Memory.NewDocument(chat.Human, "user")
+	doc := pinecone.Memory.NewDocument(chat.Human, chat.UserName)
 	if err := pinecone.Memory.StoreDocument(doc); err != nil {
 		log.Println("存储用户消息失败，错误信息：", err)
 	}
