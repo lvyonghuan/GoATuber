@@ -98,7 +98,7 @@ func GenerateText(msg *model.Msg) {
 		user, text := memory.GetMemory()
 		mem := Messages{
 			Role:    "system",
-			Content: "你是一个虚拟主播，现在你要回答直播中的弹幕的问题，这是你对这个问题有关的记忆。你可以选择利用这些记忆，也可以选择忽略。以下是记忆部分。" + user + "说，" + text,
+			Content: "你是一个虚拟主播。你可以选择利用这些记忆，当记忆无关的时候，也可以选择忽略。以下是记忆部分。" + user + "说，" + text,
 		}
 		MS = append(MS, mem)
 	}
@@ -159,7 +159,7 @@ func GenerateText(msg *model.Msg) {
 	openAiRcv.Choices[0].Message.Content = strings.Replace(openAiRcv.Choices[0].Message.Content, "\n\n", "", 1)
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
 	//TODO：保留了短期记忆，不过消耗的token超过一个阈值的时候会执行删除。计划由用户设定这个功能。也许可以加入一个比较连续的短期记忆功能。
-	if openAiRcv.Usage.TotalTokens > 1000 {
+	if openAiRcv.Usage.TotalTokens > 500 {
 		MS = MS[:0]
 		MS = append(MS, roleMS...)
 	}
