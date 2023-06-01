@@ -11,6 +11,8 @@ type Chat struct {
 	AI       string
 }
 
+//TODO:优化记忆逻辑
+
 func (chat Chat) StoreMessage() {
 	doc := pinecone.Memory.NewDocument(chat.Human, chat.UserName)
 	if err := pinecone.Memory.StoreDocument(doc); err != nil {
@@ -28,7 +30,6 @@ func (chat Chat) GetMemory() (user, text string) {
 	docs, err := pinecone.Memory.RetrieveSimilarDocumentsByText(chat.Human, 1)
 	if err != nil {
 		log.Println("记忆获取失败，错误消息：", err)
-		log.Println(docs)
 	}
 	for _, d := range docs {
 		log.Println(d.User, d.Text)

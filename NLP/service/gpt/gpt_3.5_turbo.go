@@ -98,7 +98,7 @@ func GenerateText(msg *model.Msg) {
 		user, text := memory.GetMemory()
 		mem := Messages{
 			Role:    "system",
-			Content: "你是一个虚拟主播。你可以选择利用这些记忆，当记忆无关的时候，也可以选择忽略。以下是记忆部分。" + user + "说，" + text,
+			Content: "你是一个虚拟主播。你可以选择利用这些记忆，当记忆无关的时候，也可以选择忽略。请不要在发言中直接提到“记忆”。以下是记忆部分。" + user + "说，" + text,
 		}
 		MS = append(MS, mem)
 	}
