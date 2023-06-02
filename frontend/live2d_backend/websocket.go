@@ -27,6 +27,7 @@ func Start(c *gin.Context) {
 		log.Println("与web建立websocket连接失败：", err)
 		return
 	}
+	WebsocketToNLP <- true //初始化NLP信息读取模块
 	go write(conn)
 	go read(conn)
 }

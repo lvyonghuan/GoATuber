@@ -39,9 +39,10 @@ func GetVoice(text *sensitive.OutPut) {
 			"speed":  config.XFCfg.XfyunVoice.Speed,  //语速
 			"volume": config.XFCfg.XfyunVoice.Volume, //音量
 			"pitch":  config.XFCfg.XfyunVoice.Pitch,  //音高
-			"bgs":    0,                              //是否有背景音，肯定没有啊，，，
-			"reg":    config.XFCfg.XfyunVoice.Reg,    //英文发音方式
-			"rdn":    config.XFCfg.XfyunVoice.Rdn,    //数字发音方式
+			"tte":    "UTF8",
+			"bgs":    0,                           //是否有背景音，肯定没有啊，，，
+			"reg":    config.XFCfg.XfyunVoice.Reg, //英文发音方式
+			"rdn":    config.XFCfg.XfyunVoice.Rdn, //数字发音方式
 		},
 		"data": map[string]interface{}{
 			"text":     base64.StdEncoding.EncodeToString([]byte(text.Msg)), //文本内容
@@ -54,6 +55,7 @@ func GetVoice(text *sensitive.OutPut) {
 		log.Println("向讯飞发送信息错误，错误信息：", err)
 		return
 	}
+	var voice []string
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
@@ -64,8 +66,23 @@ func GetVoice(text *sensitive.OutPut) {
 		if err != nil {
 			log.Fatalf("讯飞返回信息格式化失败，错误信息：%v", err)
 		}
+		voice = append(voice, respMsg.Data.Audio)
 		if respMsg.Data.Status == 2 {
 			break
 		}
 	}
+	var decodedVoice []byte
+	for _, base := range voice {
+		decoded, err := base64.StdEncoding.DecodeString(base)
+		if err != nil {
+			log.Println("base64解码错误，错误信息：", err)
+			return
+		}
+		decodedVoice = append(decodedVoice, decoded...)
+	}
+	voiceString := base64.StdEncoding.EncodeToString(decodedVoice)
+	text.Mu.Lock()
+	text.Voice = voiceString
+	text.VType = 2
+	text.Mu.Unlock()
 }

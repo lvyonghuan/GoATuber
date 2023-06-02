@@ -11,6 +11,7 @@ type SPEECH struct {
 	Speech struct {
 		UseXfyun        bool `mapstructure:"use_xfyun"`
 		UseTalkinggenie bool `mapstructure:"use_talkinggenie"`
+		UseAzure        bool `mapstructure:"use_azure"`
 	}
 }
 
@@ -18,8 +19,8 @@ var SpeechCfg SPEECH
 
 // InitSPEECHConfig 初始化语音模块配置文件
 func InitSPEECHConfig() {
-	if _, err := os.Stat("SPEECH/config/SpeechConfig.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("SPEECH/config/SpeechConfig.cfg")
+	if _, err := os.Stat("config/SPEECH/SpeechConfig.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("config/SPEECH/SpeechConfig.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -29,7 +30,9 @@ func InitSPEECHConfig() {
 			"# 使用科大讯飞语音合成平台（调用在线接口）\n" +
 			"use_xfyun = true \n" +
 			"# 使用会话精灵（非官方api）（调用在线接口）\n" +
-			"use_talkinggenie = false \n"))
+			"use_talkinggenie = false \n" +
+			"# 使用azure\n" +
+			"use_azure = false\n"))
 		if err != nil {
 			log.Println(err)
 		}
@@ -39,7 +42,7 @@ func InitSPEECHConfig() {
 	}
 	viper.SetConfigName("SpeechConfig.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./SPEECH/config") // 指定查找配置文件的路径
+	viper.AddConfigPath("./config/SPEECH") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read frontend failed: %v", err)
@@ -52,5 +55,7 @@ func InitSPEECHConfig() {
 		InitXFConfig()
 	} else if SpeechCfg.Speech.UseTalkinggenie {
 		InitTalkinggenieConfig()
+	} else if SpeechCfg.Speech.UseAzure {
+		InitAzureConfig()
 	}
 }

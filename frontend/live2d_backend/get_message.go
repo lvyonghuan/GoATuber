@@ -1,4 +1,4 @@
-// Package live2d_backend 前后端交互入口：借助websocket进行
+// Package backend 前后端交互入口：借助websocket进行
 package backend
 
 import (
@@ -12,7 +12,7 @@ var OutPutChan = make(chan OutMessage, 1)
 
 type OutMessage struct {
 	Voice      string `json:"voice"`
-	VType      int    `json:"VType"`      //voice格式type，1表示http，2表示base64编码
+	VType      int    `json:"VType"`      //voice格式type，1表示http，2表示base64编码,3为二进制（编码成base64）
 	Act        string `json:"act"`        //数组名称
 	Movement   string `json:"movement"`   //动作，全身的
 	Expression string `json:"expression"` //表情，脸部的

@@ -18,8 +18,8 @@ type Talkinggenie struct {
 var TalkinggenieCfg Talkinggenie
 
 func InitTalkinggenieConfig() {
-	if _, err := os.Stat("SPEECH/config/talkinggenieConfig.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("SPEECH/config/talkinggenieConfig.cfg")
+	if _, err := os.Stat("config/SPEECH/talkinggenieConfig.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("config/SPEECH/talkinggenieConfig.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -41,7 +41,7 @@ func InitTalkinggenieConfig() {
 	}
 	viper.SetConfigName("talkinggenieConfig.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./SPEECH/config") // 指定查找配置文件的路径
+	viper.AddConfigPath("./config/SPEECH") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read frontend failed: %v", err)

@@ -34,8 +34,8 @@ var GPTCfg GptConfig
 
 // InitNLPConfig 初始化NLP模块配置
 func InitNLPConfig() {
-	if _, err := os.Stat("NLP/NLPConfig.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("NLP/NLPConfig.cfg")
+	if _, err := os.Stat("config/NLP/NLPConfig.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("config/NLP/NLPConfig.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -55,7 +55,7 @@ func InitNLPConfig() {
 	}
 	viper.SetConfigName("NLPConfig.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./NLP") // 指定查找配置文件的路径
+	viper.AddConfigPath("./config/NLP") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read frontend failed: %v", err)
@@ -68,8 +68,8 @@ func InitNLPConfig() {
 
 // InitGPTConfig 初始化GPT配置
 func InitGPTConfig() {
-	if _, err := os.Stat("NLP/service/gpt/gptConfig.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("NLP/service/gpt/gptConfig.cfg")
+	if _, err := os.Stat("config/NLP/GPTConfig/gptConfig.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("config/NLP/GPTConfig/gptConfig.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -101,7 +101,7 @@ func InitGPTConfig() {
 	}
 	viper.SetConfigName("gptConfig.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./NLP/service/gpt") // 指定查找配置文件的路径
+	viper.AddConfigPath("./config/NLP/GPTConfig") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read frontend failed: %v", err)
