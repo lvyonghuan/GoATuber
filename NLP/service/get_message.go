@@ -90,7 +90,7 @@ func ChooseMessage() {
 					ChooseToReadFlag <- true
 					continue
 				} else {
-					GetToChooseFlag <- true //没弹幕的时候，防止管道堵塞
+					GetToChooseFlag <- true //没弹幕的时候，防止管道堵塞（msgMu应该把这个状况给避免了...希望如此，不然这里会发生死循环从而占用cpu）
 				}
 			}
 		}
