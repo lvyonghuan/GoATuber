@@ -17,8 +17,6 @@ func GetMessage() {
 		//消息从过滤器流向NLP模块
 		case msg := <-FilterToNLP:
 			service.GetMessageFromChat(msg)
-		default:
-			continue
 		}
 	}
 }

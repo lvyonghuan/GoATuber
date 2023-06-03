@@ -3,6 +3,7 @@ package azure
 import (
 	"GoTuber/SPEECH/config"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -16,7 +17,8 @@ func GetAuthentication() {
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
-			panic(err)
+			log.Println(err)
+			return
 		}
 		defer resp.Body.Close()
 

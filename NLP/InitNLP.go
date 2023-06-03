@@ -8,6 +8,7 @@ import (
 
 func InitNLP() {
 	service.HandelMsg.IsUse = false
+	service.MsgMu.Lock() //初始化锁
 	go service.ChooseMessage()
 	service.ReadToGetFlag <- true
 	go service.HandelMessage()
