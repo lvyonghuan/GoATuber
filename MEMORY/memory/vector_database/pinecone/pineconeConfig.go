@@ -8,10 +8,8 @@ import (
 )
 
 type pineconeConfig struct {
-	ApiKey      string `mapstructure:"api-key"`
-	IndexName   string `mapstructure:"index"`
-	ProjectName string `mapstructure:"project"`
-	Environment string `mapstructure:"environment"`
+	ApiKey string `mapstructure:"api-key"`
+	Url    string `mapstructure:"url"`
 }
 
 var pineconeCfg pineconeConfig
@@ -26,12 +24,8 @@ func InitPineconeConfig() {
 		_, err = f.Write([]byte("# frontend.toml 配置文件\n\n" +
 			"# pinecone API-KEY\n" +
 			"api-key = \"xxxxx\"\n" +
-			"# pinecone index 你的index名称\n" +
-			"index = \"xxx\"\n" +
-			"# pinecone project 你的project名称\n" +
-			"project = \"xxx\"\n" +
-			"# environment 你的environment名称\n" +
-			"environment = \"xxx\"\n\n"))
+			"# url 在pinecone控制台的index的名称的下面\n" +
+			"url = \"xxx\"\n"))
 		if err != nil {
 			log.Println(err)
 		}
