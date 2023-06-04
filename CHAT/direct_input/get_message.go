@@ -19,7 +19,7 @@ func GetMessage() {
 			}
 			var msg model.Chat
 			msg.Message = ms
-			msg.ChatName = "访客"
+			msg.ChatName = "管理员"
 			MESSAGE.ChatToFilter <- msg
 		}
 		if err := scanner.Err(); err != nil {
