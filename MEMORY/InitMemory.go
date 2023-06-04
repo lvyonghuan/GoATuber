@@ -1,6 +1,8 @@
 package MEMORY
 
-import "GoTuber/MEMORY/pinecone"
+import (
+	"GoTuber/MEMORY/memory/vector_database/pinecone"
+)
 
 func InitMemory() {
 	InitMemoryConfig()
