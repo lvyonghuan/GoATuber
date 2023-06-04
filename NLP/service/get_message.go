@@ -3,6 +3,7 @@ package service
 import (
 	"GoTuber/frontend/live2d_backend"
 	"container/list"
+	"log"
 	"sync"
 	"time"
 
@@ -103,8 +104,9 @@ func HandelMessage() {
 		<-ChooseToReadFlag
 		<-backend.WebsocketToNLP
 		if HandelMsg.IsUse {
+			log.Println("正在生成文本......")
 			if config.NLPCfg.Nlp.UseGPT {
-				gpt.GenerateText(&HandelMsg)
+				gpt.GenerateTextByOpenAI(&HandelMsg)
 			} else if config.NLPCfg.Nlp.UseOther {
 				//TODO：以后再说
 			}

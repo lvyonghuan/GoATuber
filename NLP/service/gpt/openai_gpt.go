@@ -2,13 +2,11 @@ package gpt
 
 import (
 	memory_gpt "GoTuber/MEMORY/NLPmodel/gpt"
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -21,74 +19,8 @@ import (
 	"GoTuber/proxy"
 )
 
-var MS []Messages     //向OpenAI传递的消息，包含了用户设定的提示词
-var roleMS []Messages //角色信息
-
-const Openaiapiurl1 = "https://api.openai.com/v1/chat/completions" //对话使用的url
-
-type Messages struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
-}
-
-// 对话使用的Request body
-type postData struct {
-	Model            string     `json:"model"`
-	Messages         []Messages `json:"messages"` //message依靠传入信息获取
-	MaxTokens        int        `json:"max_tokens"`
-	Temperature      float64    `json:"temperature"`
-	TopP             float64    `json:"top_p"`
-	Stop             string     `json:"stop"`
-	PresencePenalty  float64    `json:"presence_penalty"`
-	FrequencyPenalty float64    `json:"frequency_penalty"`
-}
-
-// OpenAiRcv 对话使用的Response
-type OpenAiRcv struct {
-	Id      string `json:"id"`
-	Object  string `json:"object"`
-	Created int64  `json:"created"`
-	Model   string `json:"model"`
-	Choices []struct {
-		Message      Messages `json:"message"`
-		FinishReason string   `json:"finish_reason"`
-	} `json:"choices"`
-	Usage struct {
-		PromptTokens    int `json:"prompt_tokens"`
-		CompletionTokes int `json:"completion_tokens"`
-		TotalTokens     int `json:"total_tokens"`
-	}
-}
-
-// InitRole 这个函数用于获取role.cfg的角色文本信息
-func InitRole() {
-	file, err := os.Open("./config/NLP/GPTConfig/role.cfg")
-	if err != nil {
-		log.Fatalf("open config file failed: %v", err)
-	}
-	defer file.Close()
-	reader := bufio.NewReader(file)
-	for i := 1; ; i++ {
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			break
-		}
-		if i >= 2 {
-			msg := strings.Split(line, ":")
-			ms := &Messages{
-				Role:    msg[0],
-				Content: msg[1],
-			}
-			roleMS = append(roleMS, *ms)
-		}
-	}
-	MS = append(MS, roleMS...)
-}
-
-// GenerateText 文本请求
-func GenerateText(msg *model.Msg) {
-	log.Println("正在生成文本......")
-
+// GenerateTextByOpenAI 文本请求
+func GenerateTextByOpenAI(msg *model.Msg) {
 	//记忆相关
 	memory := memory_gpt.Chat{
 		Human: msg.Msg,
@@ -108,15 +40,16 @@ func GenerateText(msg *model.Msg) {
 		Content: msg.Name + "说：" + msg.Msg,
 	}
 	MS = append(MS, *messages)
+	log.Println(MS)
 	postDataTemp := postData{
-		Model:            config.GPTCfg.OpenAi.Model,
+		Model:            config.GPTCfg.General.Model,
 		Messages:         MS,
-		MaxTokens:        config.GPTCfg.OpenAi.MaxTokens,
-		Temperature:      config.GPTCfg.OpenAi.Temperature,
-		TopP:             config.GPTCfg.OpenAi.TopP,
-		Stop:             config.GPTCfg.OpenAi.Stop,
-		PresencePenalty:  config.GPTCfg.OpenAi.PresencePenalty,
-		FrequencyPenalty: config.GPTCfg.OpenAi.FrequencyPenalty,
+		MaxTokens:        config.GPTCfg.General.MaxTokens,
+		Temperature:      config.GPTCfg.General.Temperature,
+		TopP:             config.GPTCfg.General.TopP,
+		Stop:             config.GPTCfg.General.Stop,
+		PresencePenalty:  config.GPTCfg.General.PresencePenalty,
+		FrequencyPenalty: config.GPTCfg.General.FrequencyPenalty,
 	}
 	postDataBytes, err := json.Marshal(postDataTemp)
 	if err != nil {

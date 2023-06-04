@@ -8,17 +8,16 @@ import (
 	"github.com/spf13/viper"
 )
 
-type NLPConfig struct {
-	Nlp struct {
-		UseGPT   bool `mapstructure:"use_gpt"`
-		UseOther bool `mapstructure:"use_other"`
-	}
-}
-
 type GptConfig struct {
 	// openai相关配置
 	OpenAi struct {
-		ApiKey           string  `mapstructure:"api_key"` //api-key
+		ApiKey string `mapstructure:"api_key"` //api-key
+	}
+	Azure struct {
+		EndPoint string `mapstructure:"end_point"` //终结点，在控制台查询
+		ApiKey   string `mapstructure:"api_key"`   //api-key
+	}
+	General struct {
 		Model            string  //使用的模型
 		Temperature      float64 //对话温度
 		TopP             float64 `mapstructure:"top_p"`             //代替温度采样的方法，称为核采样
@@ -29,42 +28,7 @@ type GptConfig struct {
 	}
 }
 
-var NLPCfg NLPConfig
 var GPTCfg GptConfig
-
-// InitNLPConfig 初始化NLP模块配置
-func InitNLPConfig() {
-	if _, err := os.Stat("config/NLP/NLPConfig.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("config/NLP/NLPConfig.cfg")
-		if err != nil {
-			log.Println(err)
-		}
-		// 自动生成配置文件
-		_, err = f.Write([]byte("# frontend.toml 配置文件\n\n" +
-			"# NLP模块配置\n[NLPConfig]\n" +
-			"# 是否使用GPT模型\n" +
-			"use_gpt = true\n" +
-			"# 是否使用其他模型\n" +
-			"use_other = false\n\n"))
-		if err != nil {
-			log.Println(err)
-		}
-		log.Println("配置文件不存在, 已自动生成配置文件, 请修改配置文件后再次运行程序, 5秒后退出程序...")
-		time.Sleep(5 * time.Second)
-		os.Exit(0)
-	}
-	viper.SetConfigName("NLPConfig.cfg")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath("./config/NLP") // 指定查找配置文件的路径
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Fatalf("read frontend failed: %v", err)
-	}
-	err = viper.Unmarshal(&NLPCfg)
-	if err != nil {
-		log.Fatalf("unmarshal frontend failed: %v", err)
-	}
-}
 
 // InitGPTConfig 初始化GPT配置
 func InitGPTConfig() {
@@ -77,7 +41,11 @@ func InitGPTConfig() {
 		_, err = f.Write([]byte("# frontend.toml 配置文件\n\n" +
 			"# openai配置\n[openai]\n" +
 			"# 你的 OpenAI API Key, 可以在 https://beta.openai.com/account/api-keys 获取\n" +
-			"api_key = \"sk-xxxxxx\"\n" +
+			"api_key = \"sk-xxxxxx\"\n\n" +
+			"# azure配置（当你使用azure OpenAI的时候）\n[azure]\n" +
+			"end_point = \"xxxxx\"\n" +
+			"api_key = \"xxxxx\"\n" +
+			"# 通用配置\n[general]\n" +
 			"# 使用的模型，默认是 gpt-3.5-turbo\n" +
 			"model = \"gpt-3.5-turbo\"\n" +
 			"# 对话温度，越大越随机 参照https://algowriting.medium.com/gpt-3-temperature-setting-101-41200ff0d0be\n" +
