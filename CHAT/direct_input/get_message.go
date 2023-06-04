@@ -3,23 +3,27 @@ package direct_input
 import (
 	"GoTuber/MESSAGE"
 	"GoTuber/MESSAGE/model"
-	"fmt"
+	"bufio"
 	"log"
+	"os"
+	"strings"
 )
 
 func GetMessage() {
-	go func() {
-		for {
-			var ms string
-			_, err := fmt.Scanln(&ms)
-			if err != nil {
-				log.Println("输入失败，", err)
-				return
+	for {
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			ms := strings.TrimSpace(scanner.Text())
+			if ms == "" {
+				continue // 忽略空行
 			}
 			var msg model.Chat
 			msg.Message = ms
 			msg.ChatName = "访客"
 			MESSAGE.ChatToFilter <- msg
 		}
-	}()
+		if err := scanner.Err(); err != nil {
+			log.Println("输入失败,", err)
+		}
+	}
 }
