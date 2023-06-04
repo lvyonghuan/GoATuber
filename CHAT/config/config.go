@@ -14,6 +14,7 @@ type ChatConfig struct {
 	Select struct {
 		Bilibili bool `mapstructure:"bilibili"`
 		YouTube  bool `mapstructure:"YouTube"`
+		Direct   bool `mapstructure:"direct_input"`
 	}
 	Bilibili struct {
 		RoomID int `mapstructure:"room_id"`
@@ -34,7 +35,9 @@ func InitCHATConfig() {
 			"# B站（默认使用B站）\n" +
 			"bilibili = true\n" +
 			"# YouTube（暂不考虑）\n" +
-			"YouTube = false\n\n" +
+			"YouTube = false\n" +
+			"# 直接输入消息\n" +
+			"direct_input = false\n" +
 			"# bilibili直播间信息配置\n[bilibili]\n" +
 			"room_id = 114514\n\n"))
 		if err != nil {
