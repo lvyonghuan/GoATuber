@@ -14,8 +14,10 @@ type GptConfig struct {
 		ApiKey string `mapstructure:"api_key"` //api-key
 	}
 	Azure struct {
-		EndPoint string `mapstructure:"end_point"` //终结点，在控制台查询
-		ApiKey   string `mapstructure:"api_key"`   //api-key
+		EndPoint     string `mapstructure:"end_point"`     //终结点，在控制台查询
+		ApiKey       string `mapstructure:"api_key"`       //api-key
+		DeploymentID string `mapstructure:"deployment_id"` //模型部署的名称
+		ApiVersion   string `mapstructure:"api_version"`   //要用于此操作的 API 版本
 	}
 	General struct {
 		Model            string  //使用的模型
@@ -45,6 +47,8 @@ func InitGPTConfig() {
 			"# azure配置（当你使用azure OpenAI的时候）\n[azure]\n" +
 			"end_point = \"xxxxx\"\n" +
 			"api_key = \"xxxxx\"\n" +
+			"deployment_id = \"xxxxx\"\n" +
+			"api_version = \"2023-05-15\"\n" +
 			"# 通用配置\n[general]\n" +
 			"# 使用的模型，默认是 gpt-3.5-turbo\n" +
 			"model = \"gpt-3.5-turbo\"\n" +

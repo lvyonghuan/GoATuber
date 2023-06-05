@@ -3,7 +3,7 @@ package gpt
 var MS []Messages     //向OpenAI传递的消息，包含了用户设定的提示词
 var roleMS []Messages //角色信息
 
-const Openaiapiurl1 = "https://api.openai.com/v1/chat/completions" //对话使用的url
+const OpenAIChatUrl = "https://api.openai.com/v1/chat/completions" //OpenAI对话使用的url
 
 type Messages struct {
 	Role    string `json:"role"`
@@ -20,9 +20,10 @@ type postData struct {
 	Stop             string     `json:"stop"`
 	PresencePenalty  float64    `json:"presence_penalty"`
 	FrequencyPenalty float64    `json:"frequency_penalty"`
+	User             string     `json:"user"`
 }
 
-// OpenAiRcv 对话使用的Response
+// OpenAiRcv Response
 type OpenAiRcv struct {
 	Id      string `json:"id"`
 	Object  string `json:"object"`

@@ -40,7 +40,6 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		Content: msg.Name + "说：" + msg.Msg,
 	}
 	MS = append(MS, *messages)
-	log.Println(MS)
 	postDataTemp := postData{
 		Model:            config.GPTCfg.General.Model,
 		Messages:         MS,
@@ -50,6 +49,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		Stop:             config.GPTCfg.General.Stop,
 		PresencePenalty:  config.GPTCfg.General.PresencePenalty,
 		FrequencyPenalty: config.GPTCfg.General.FrequencyPenalty,
+		User:             msg.Name,
 	}
 	postDataBytes, err := json.Marshal(postDataTemp)
 	if err != nil {
@@ -57,7 +57,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		log.Println(err)
 		return
 	}
-	req, _ := http.NewRequest("POST", Openaiapiurl1, bytes.NewBuffer(postDataBytes))
+	req, _ := http.NewRequest("POST", OpenAIChatUrl, bytes.NewBuffer(postDataBytes))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+config.GPTCfg.OpenAi.ApiKey)
 	client, err := proxy.Client()

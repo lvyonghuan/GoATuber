@@ -107,6 +107,8 @@ func HandelMessage() {
 			log.Println("正在生成文本......")
 			if config.NLPCfg.Nlp.UseGPT {
 				gpt.GenerateTextByOpenAI(&HandelMsg)
+			} else if config.NLPCfg.Nlp.UseAzureGPT {
+				gpt.GenerateTextByAzureOpenAI(&HandelMsg)
 			} else if config.NLPCfg.Nlp.UseOther {
 				//TODO：以后再说
 			}

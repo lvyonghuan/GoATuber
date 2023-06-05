@@ -26,7 +26,7 @@ func InitNLPConfig() {
 		}
 		// 自动生成配置文件
 		_, err = f.Write([]byte("# frontend.toml 配置文件\n\n" +
-			"# NLP模块配置\n[NLPConfig]\n" +
+			"# NLP模块配置\n[NLP]\n" +
 			"# 是否使用GPT模型\n" +
 			"use_gpt = true\n" +
 			"# 是否使用azure GPT\n" +
