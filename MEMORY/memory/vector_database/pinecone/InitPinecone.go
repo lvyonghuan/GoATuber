@@ -1,5 +1,0 @@
-package pinecone
-
-func InitPinecone() {
-
-}

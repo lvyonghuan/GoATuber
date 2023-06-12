@@ -6,9 +6,11 @@ import (
 )
 
 type Chat struct {
-	UserName string
-	Human    string
-	AI       string
+	Type      string
+	Namespace string
+	UserName  string
+	Human     string
+	AI        string
 }
 
 //TODO:优化记忆逻辑
@@ -18,7 +20,7 @@ func (chat Chat) StoreMessage() {
 	if vector == nil {
 		return
 	}
-	pinecone.PineconeStore("chat", chat.Human, chat.UserName, "live", vector)
+	pinecone.PineconeStore(chat.Type, chat.Human, chat.UserName, chat.Namespace, vector)
 }
 
 func (chat Chat) GetMemory() (user, text string) {
@@ -30,5 +32,5 @@ func (chat Chat) GetMemory() (user, text string) {
 	if memory == nil {
 		return "", ""
 	}
-	return memory[2], memory[0]
+	return memory[2], memory[0] //TODO:这里有点太恶俗了，要重新理一理
 }

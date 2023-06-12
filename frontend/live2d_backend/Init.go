@@ -29,12 +29,20 @@ func Init() {
 			c.Writer.Flush()
 		}
 	})
-	r.GET("/get", getModelName)
+	r.GET("/get", getModelInfo)
 	r.Run(":9000") //服务在本地9000端口运行
 }
 
-func getModelName(c *gin.Context) {
+//ModelInfo初始化内容↓
+
+type modelInfo struct {
+	Name  string  `json:"name"`
+	Mouth float64 `json:"mouth"`
+}
+
+func getModelInfo(c *gin.Context) {
 	name := get_live2d_model_info.GetModelName()
+	_ = get_live2d_model_info.GetModelConfig()
 	if name == "" {
 		return
 	}

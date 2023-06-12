@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+var roleLine int
+
 // InitRole 这个函数用于获取role.cfg的角色文本信息
 func InitRole() {
 	file, err := os.Open("./config/NLP/GPTConfig/role.cfg")
@@ -15,12 +17,12 @@ func InitRole() {
 	}
 	defer file.Close()
 	reader := bufio.NewReader(file)
-	for i := 1; ; i++ {
+	for roleLine = 1; ; roleLine++ {
 		line, err := reader.ReadString('\n')
 		if err != nil {
 			break
 		}
-		if i >= 2 {
+		if roleLine >= 2 {
 			msg := strings.Split(line, ":")
 			ms := &Messages{
 				Role:    msg[0],
@@ -29,5 +31,6 @@ func InitRole() {
 			roleMS = append(roleMS, *ms)
 		}
 	}
+	roleLine -= 1
 	MS = append(MS, roleMS...)
 }
