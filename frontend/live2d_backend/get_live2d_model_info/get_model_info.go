@@ -6,6 +6,10 @@ import (
 	"regexp"
 )
 
+type modelConfig struct {
+	Mouth float64
+}
+
 func GetModelName() string {
 	files, err := os.ReadDir("dist/model")
 	if err != nil {

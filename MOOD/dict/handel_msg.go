@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+//TODO:算法更改 || 利用gpt返回情绪
+
 var searchMessage = make(chan string, 1)
 var getWords = make(chan []string, 1)
 

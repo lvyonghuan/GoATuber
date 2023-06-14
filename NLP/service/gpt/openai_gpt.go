@@ -30,7 +30,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		user, text := memory.GetMemory()
 		mem := Messages{
 			Role:    "system",
-			Content: "你是一个虚拟主播。你可以选择利用这些记忆，当记忆无关的时候，也可以选择忽略。请不要在发言中直接提到“记忆”。以下是记忆部分。" + user + "说，" + text,
+			Content: user + "说，" + text,
 		}
 		MS = append(MS, mem)
 	}
@@ -89,18 +89,29 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		log.Println("OpenAI API调用失败，返回内容：", string(body))
 		return
 	}
+	log.Println("openai生成内容：", openAiRcv.Choices[0].Message.Content)
 	openAiRcv.Choices[0].Message.Content = strings.Replace(openAiRcv.Choices[0].Message.Content, "\n\n", "", 1)
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
-	//TODO：保留了短期记忆，不过消耗的token超过一个阈值的时候会执行删除。计划由用户设定这个功能。也许可以加入一个比较连续的短期记忆功能。
-	if openAiRcv.Usage.TotalTokens > 500 {
-		MS = MS[:0]
-		MS = append(MS, roleMS...)
+
+	//压入AI的回答，形成短期记忆
+	messagesAI := Messages{
+		Role:    "assistant",
+		Content: openAiRcv.Choices[0].Message.Content,
 	}
+	MS = append(MS, messagesAI)
 
 	if MEMORY.MemoryCfg.IsUse {
 		memory.UserName = msg.Name
+		memory.Type = "chat"
+		memory.Namespace = "live"
 		memory.AI = openAiRcv.Choices[0].Message.Content
 		go memory.StoreMessage()
+		cleanMemoryMessage() //清除这一次对话的记忆内容
+	}
+
+	//TODO：保留了短期记忆，不过消耗的token超过一个阈值的时候会执行删除。计划由用户设定这个功能。也许可以加入一个比较连续的短期记忆功能。
+	if openAiRcv.Usage.TotalTokens > 500 {
+		cleanAllMessage()
 	}
 
 	var Msg sensitive.OutPut

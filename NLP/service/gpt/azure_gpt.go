@@ -33,11 +33,12 @@ func GenerateTextByAzureOpenAI(msg *model.Msg) {
 		MS = append(MS, mem)
 	}
 
-	messages := &Messages{
+	messages := Messages{
 		Role:    "user",
 		Content: msg.Name + "说：" + msg.Msg,
 	}
-	MS = append(MS, *messages)
+	MS = append(MS, messages)
+
 	postDataTemp := postData{
 		Model:            config.GPTCfg.General.Model,
 		Messages:         MS,
@@ -87,17 +88,28 @@ func GenerateTextByAzureOpenAI(msg *model.Msg) {
 		log.Println("Azure OpenAI API调用失败，返回内容：", string(body))
 		return
 	}
+	log.Println("azure openai生成内容：", openAiRcv.Choices[0].Message.Content)
 	openAiRcv.Choices[0].Message.Content = strings.Replace(openAiRcv.Choices[0].Message.Content, "\n\n", "", 1)
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
-	if openAiRcv.Usage.TotalTokens > 500 {
-		MS = MS[:0]
-		MS = append(MS, roleMS...)
+
+	//压入AI的回答，形成短期记忆
+	messagesAI := Messages{
+		Role:    "assistant",
+		Content: openAiRcv.Choices[0].Message.Content,
 	}
+	MS = append(MS, messagesAI)
 
 	if MEMORY.MemoryCfg.IsUse {
 		memory.UserName = msg.Name
+		memory.Type = "chat"
+		memory.Namespace = "live"
 		memory.AI = openAiRcv.Choices[0].Message.Content
 		go memory.StoreMessage()
+		cleanMemoryMessage()
+	}
+
+	if openAiRcv.Usage.TotalTokens > 500 {
+		cleanAllMessage()
 	}
 
 	var Msg sensitive.OutPut

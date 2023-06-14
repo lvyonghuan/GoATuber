@@ -52,7 +52,7 @@ type Vector struct {
 }
 
 // PineconeQuery 请求相似数据
-func PineconeQuery(filter, namespce string, vector []float32) []string {
+func PineconeQuery(filter, namespace string, vector []float32) []string {
 	url := "https://" + pineconeCfg.Url + "/query"
 	data := QueryPayload{
 		Filter: map[string]any{
@@ -62,7 +62,7 @@ func PineconeQuery(filter, namespce string, vector []float32) []string {
 		IncludeMetadata: true,
 		Vector:          vector,
 		TopK:            1,
-		Namespace:       namespce,
+		Namespace:       namespace,
 	}
 	payload, err := json.Marshal(data)
 	if err != nil {
