@@ -42,7 +42,6 @@ type modelInfo struct {
 
 func getModelInfo(c *gin.Context) {
 	name := get_live2d_model_info.GetModelName()
-	_ = get_live2d_model_info.GetModelConfig()
 	if name == "" {
 		return
 	}

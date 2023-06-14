@@ -1,7 +1,6 @@
 package get_live2d_model_info
 
 import (
-	"github.com/spf13/viper"
 	"log"
 	"os"
 	"regexp"
@@ -28,20 +27,4 @@ func GetModelName() string {
 	}
 	log.Println("未找到模型文件！特别说明：该项目目前只支持model3.json后缀的模型文件")
 	return ""
-}
-
-func GetModelConfig() float64 {
-	var modelCfg modelConfig
-	viper.SetConfigName("ModelConfig.cfg")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath("./frontend/live2d_backend/get_live2d_model_info") // 指定查找配置文件的路径
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Fatalf("read frontend failed: %v", err)
-	}
-	err = viper.Unmarshal(&modelCfg)
-	if err != nil {
-		log.Fatalf("unmarshal frontend failed: %v", err)
-	}
-	return modelCfg.Mouth
 }
