@@ -27,6 +27,7 @@ func InitRole() {
 			ms := &RequestMessages{
 				Role:    msg[0],
 				Content: msg[1],
+				Name:    "system",
 			}
 			roleMS = append(roleMS, *ms)
 		}

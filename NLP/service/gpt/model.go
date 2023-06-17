@@ -3,12 +3,11 @@ package gpt
 import (
 	"GoTuber/MESSAGE/model"
 	"GoTuber/NLP/config"
+	"GoTuber/NLP/service/gpt/function"
 )
 
-var MS []RequestMessages                  //向OpenAI传递的消息，包含了用户设定的提示词
-var roleMS []RequestMessages              //角色信息
-var FunctionJson = make([]interface{}, 0) //函数json信息，传递给gpt
-var UseFunction bool                      //检测是否使用function
+var MS []RequestMessages     //向OpenAI传递的消息，包含了用户设定的提示词
+var roleMS []RequestMessages //角色信息
 
 const OpenAIChatUrl = "https://api.openai.com/v1/chat/completions" //OpenAI对话使用的url
 
@@ -89,7 +88,7 @@ func (req *postDataWithFunction) initRequestModel(msg *model.Msg) {
 	req.MaxTokens = config.GPTCfg.General.MaxTokens
 	req.Stop = config.GPTCfg.General.Stop
 	req.User = msg.Name
-	req.Function = FunctionJson
+	req.Function = function.FunctionJson
 	req.FunctionCall = "auto"
 }
 

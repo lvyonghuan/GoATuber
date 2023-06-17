@@ -1,6 +1,8 @@
 package gpt
 
 import (
+	"GoTuber/MEMORY"
+	memory_gpt "GoTuber/MEMORY/NLPmodel/gpt"
 	"GoTuber/NLP/service/gpt/function"
 	"bytes"
 	"encoding/json"
@@ -12,8 +14,6 @@ import (
 	"strings"
 	"time"
 
-	"GoTuber/MEMORY"
-	memory_gpt "GoTuber/MEMORY/NLPmodel/gpt"
 	sensitive "GoTuber/MESSAGE/filter"
 	"GoTuber/MESSAGE/model"
 	"GoTuber/NLP/config"
@@ -24,27 +24,14 @@ import (
 
 // GenerateTextByOpenAI 文本请求
 func GenerateTextByOpenAI(msg *model.Msg) {
-	//记忆相关
-	memory := memory_gpt.Chat{
-		Human: msg.Msg,
-		AI:    "",
-	}
-	if MEMORY.MemoryCfg.IsUse {
-		user, text := memory.GetMemory()
-		mem := RequestMessages{
-			Role:    "system",
-			Content: user + "说，" + text,
-		}
-		MS = append(MS, mem)
-	}
-
 	messages := &RequestMessages{
 		Role:    "user",
 		Content: msg.Name + "说：" + msg.Msg,
+		Name:    "system",
 	}
 	MS = append(MS, *messages)
 	var postDataTemp interface{}
-	if UseFunction {
+	if function.UseFunction {
 		var postData postDataWithFunction
 		postData.initRequestModel(msg)
 		postDataTemp = postData
@@ -91,6 +78,8 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		return
 	}
 
+	log.Println(postDataTemp)
+	log.Println(openAiRcv.Choices[0])
 	//检查是否使用函数调用
 	if openAiRcv.Choices[0].FinishReason == "function_call" {
 		openAiRcv = secondRequest(postDataTemp.(postDataWithFunction), openAiRcv)
@@ -107,16 +96,21 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	messagesAI := RequestMessages{
 		Role:    "assistant",
 		Content: openAiRcv.Choices[0].Message.Content,
+		Name:    "AI",
 	}
 	MS = append(MS, messagesAI)
 
 	if MEMORY.MemoryCfg.IsUse {
+		memory := memory_gpt.Chat{
+			Human: msg.Msg,
+			AI:    "",
+		}
 		memory.UserName = "你"
 		memory.Type = "chat"
 		memory.Namespace = "live"
 		memory.AI = openAiRcv.Choices[0].Message.Content
 		go memory.StoreMessage()
-		cleanMemoryMessage() //清除这一次对话的记忆内容
+		//cleanMemoryMessage() //清除这一次对话的记忆内容
 	}
 
 	//TODO：保留了短期记忆，不过消耗的token超过一个阈值的时候会执行删除。计划由用户设定这个功能。也许可以加入一个比较连续的短期记忆功能。

@@ -2,16 +2,15 @@ package function
 
 import (
 	"GoTuber/MEMORY"
-	"GoTuber/NLP/service/gpt"
 )
 
 // InitFunctionJson 初始化JSON信息
 func InitFunctionJson() {
 	defer func() {
-		if len(gpt.FunctionJson) == 0 {
-			gpt.UseFunction = false
+		if len(FunctionJson) == 0 {
+			UseFunction = false
 		} else {
-			gpt.UseFunction = true
+			UseFunction = true
 		}
 	}()
 	//记忆函数
