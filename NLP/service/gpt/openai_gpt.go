@@ -30,7 +30,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		user, text := memory.GetMemory()
 		mem := Messages{
 			Role:    "system",
-			Content: user + "说，" + text,
+			Content: "你记得" + user + "说，" + text,
 		}
 		MS = append(MS, mem)
 	}
