@@ -26,20 +26,20 @@ func GenerateTextByAzureOpenAI(msg *model.Msg) {
 	}
 	if MEMORY.MemoryCfg.IsUse {
 		user, text := memory.GetMemory()
-		mem := Messages{
+		mem := RequestMessages{
 			Role:    "system",
 			Content: "你是一个虚拟主播。你可以选择利用这些记忆，当记忆无关的时候，也可以选择忽略。请不要在发言中直接提到“记忆”。以下是记忆部分。" + user + "说，" + text,
 		}
 		MS = append(MS, mem)
 	}
 
-	messages := Messages{
+	messages := RequestMessages{
 		Role:    "user",
 		Content: msg.Name + "说：" + msg.Msg,
 	}
 	MS = append(MS, messages)
 
-	postDataTemp := postData{
+	postDataTemp := postDataWithFunction{
 		Model:            config.GPTCfg.General.Model,
 		Messages:         MS,
 		MaxTokens:        config.GPTCfg.General.MaxTokens,
@@ -93,7 +93,7 @@ func GenerateTextByAzureOpenAI(msg *model.Msg) {
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
 
 	//压入AI的回答，形成短期记忆
-	messagesAI := Messages{
+	messagesAI := RequestMessages{
 		Role:    "assistant",
 		Content: openAiRcv.Choices[0].Message.Content,
 	}

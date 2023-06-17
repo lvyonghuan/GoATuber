@@ -3,6 +3,7 @@ package function
 //函数的存储工具
 
 import (
+	"GoTuber/NLP/service/gpt"
 	"reflect"
 	"runtime"
 )
@@ -26,9 +27,14 @@ func executeFunction(fun func([]string) string, parameter []string) string {
 }
 
 // 添加函数
-func add(fun func([]string) string) {
+func addFunc(fun func([]string) string) {
 	funcName := getFunctionName(fun)
 	Function[funcName] = fun
+}
+
+// 添加函数的json信息
+func addFuncJson(fun interface{}) {
+	gpt.FunctionJson = append(gpt.FunctionJson, fun)
 }
 
 // 获取函数

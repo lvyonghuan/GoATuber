@@ -24,7 +24,7 @@ func InitRole() {
 		}
 		if roleLine >= 2 {
 			msg := strings.Split(line, ":")
-			ms := &Messages{
+			ms := &RequestMessages{
 				Role:    msg[0],
 				Content: msg[1],
 			}

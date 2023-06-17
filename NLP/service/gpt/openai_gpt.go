@@ -1,7 +1,6 @@
 package gpt
 
 import (
-	memory_gpt "GoTuber/MEMORY/NLPmodel/gpt"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -11,6 +10,7 @@ import (
 	"time"
 
 	"GoTuber/MEMORY"
+	memory_gpt "GoTuber/MEMORY/NLPmodel/gpt"
 	sensitive "GoTuber/MESSAGE/filter"
 	"GoTuber/MESSAGE/model"
 	"GoTuber/NLP/config"
@@ -28,35 +28,40 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	}
 	if MEMORY.MemoryCfg.IsUse {
 		user, text := memory.GetMemory()
-		mem := Messages{
+		mem := RequestMessages{
 			Role:    "system",
 			Content: user + "说，" + text,
 		}
 		MS = append(MS, mem)
 	}
 
-	messages := &Messages{
+	messages := &RequestMessages{
 		Role:    "user",
 		Content: msg.Name + "说：" + msg.Msg,
 	}
 	MS = append(MS, *messages)
-	postDataTemp := postData{
-		Model:            config.GPTCfg.General.Model,
-		Messages:         MS,
-		MaxTokens:        config.GPTCfg.General.MaxTokens,
-		Temperature:      config.GPTCfg.General.Temperature,
-		TopP:             config.GPTCfg.General.TopP,
-		Stop:             config.GPTCfg.General.Stop,
-		PresencePenalty:  config.GPTCfg.General.PresencePenalty,
-		FrequencyPenalty: config.GPTCfg.General.FrequencyPenalty,
-		User:             msg.Name,
+	//postDataTemp := postDataWithFunction{
+	//	Model:            config.GPTCfg.General.Model,
+	//	Messages:         MS,
+	//	MaxTokens:        config.GPTCfg.General.MaxTokens,
+	//	Temperature:      config.GPTCfg.General.Temperature,
+	//	TopP:             config.GPTCfg.General.TopP,
+	//	Stop:             config.GPTCfg.General.Stop,
+	//	PresencePenalty:  config.GPTCfg.General.PresencePenalty,
+	//	FrequencyPenalty: config.GPTCfg.General.FrequencyPenalty,
+	//	User:             msg.Name,
+	//}
+	var postDataTemp interface{}
+	if UseFunction {
+		var postData postDataWithFunction
+		postData.initRequestModel(msg)
+		postDataTemp = postData
+	} else { //为了健壮性
+		var postData postDataWithoutFunction
+		postData.initRequestModel(msg)
+		postDataTemp = postData
 	}
 	postDataBytes, err := json.Marshal(postDataTemp)
-	if err != nil {
-		backend.WebsocketToNLP <- true
-		log.Println(err)
-		return
-	}
 	req, _ := http.NewRequest("POST", OpenAIChatUrl, bytes.NewBuffer(postDataBytes))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+config.GPTCfg.OpenAi.ApiKey)
@@ -94,14 +99,14 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
 
 	//压入AI的回答，形成短期记忆
-	messagesAI := Messages{
+	messagesAI := RequestMessages{
 		Role:    "assistant",
 		Content: openAiRcv.Choices[0].Message.Content,
 	}
 	MS = append(MS, messagesAI)
 
 	if MEMORY.MemoryCfg.IsUse {
-		memory.UserName = msg.Name
+		memory.UserName = "你"
 		memory.Type = "chat"
 		memory.Namespace = "live"
 		memory.AI = openAiRcv.Choices[0].Message.Content
