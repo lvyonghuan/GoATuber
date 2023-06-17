@@ -43,6 +43,7 @@ func work(chat *ChatServer, group *sync.WaitGroup) {
 				ChatName:  m.Uname,
 				Price:     0,
 				Message:   m.Text,
+				Uid:       int(m.Uid),
 			}
 			MESSAGE.ChatToFilter <- chat
 		case *SuperChatMessage:
@@ -51,6 +52,7 @@ func work(chat *ChatServer, group *sync.WaitGroup) {
 				ChatName:  m.Uname,
 				Price:     0,
 				Message:   m.Text,
+				Uid:       int(m.Uid),
 			}
 			MESSAGE.ChatToFilter <- chat
 			//case *GiftMessage:

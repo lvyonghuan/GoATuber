@@ -4,6 +4,7 @@ import (
 	"GoTuber/frontend/live2d_backend"
 	"container/list"
 	"log"
+	"strconv"
 	"sync"
 	"time"
 
@@ -72,6 +73,7 @@ func ChooseMessage() {
 					HandelMsg.Mu.Lock()
 					HandelMsg.Msg = scMsgList.Front().Value.(*model.Chat).Message
 					HandelMsg.Name = scMsgList.Front().Value.(*model.Chat).ChatName
+					HandelMsg.Uid = strconv.Itoa(scMsgList.Front().Value.(*model.Chat).Uid)
 					HandelMsg.IsUse = true
 					HandelMsg.Mu.Unlock()
 					scMu.Lock()
@@ -83,6 +85,7 @@ func ChooseMessage() {
 					HandelMsg.Mu.Lock()
 					HandelMsg.Msg = normalMsgList.Front().Value.(*model.Chat).Message
 					HandelMsg.Name = normalMsgList.Front().Value.(*model.Chat).ChatName
+					HandelMsg.Uid = strconv.Itoa(normalMsgList.Front().Value.(*model.Chat).Uid)
 					HandelMsg.IsUse = true
 					HandelMsg.Mu.Unlock()
 					norMu.Lock()

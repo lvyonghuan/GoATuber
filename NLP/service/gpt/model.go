@@ -14,6 +14,7 @@ const OpenAIChatUrl = "https://api.openai.com/v1/chat/completions" //OpenAIå¯¹è¯
 
 type RequestMessages struct {
 	Role    string `json:"role"`
+	Name    string `json:"name"`
 	Content string `json:"content"`
 }
 
@@ -77,6 +78,7 @@ func (req *postDataWithFunction) initRequestModel(msg *model.Msg) {
 	request := RequestMessages{
 		Role:    "user",
 		Content: msg.Msg,
+		Name:    msg.Uid,
 	}
 	MS = append(MS, request)
 	req.Messages = MS
@@ -97,6 +99,7 @@ func (req *postDataWithoutFunction) initRequestModel(msg *model.Msg) {
 	request := RequestMessages{
 		Role:    "user",
 		Content: msg.Msg,
+		Name:    msg.Uid,
 	}
 	MS = append(MS, request)
 	req.Messages = MS

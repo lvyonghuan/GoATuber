@@ -1,11 +1,14 @@
 package gpt
 
 import (
+	"GoTuber/NLP/service/gpt/function"
 	"bytes"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
+	"reflect"
+	"regexp"
 	"strings"
 	"time"
 
@@ -40,17 +43,6 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		Content: msg.Name + "说：" + msg.Msg,
 	}
 	MS = append(MS, *messages)
-	//postDataTemp := postDataWithFunction{
-	//	Model:            config.GPTCfg.General.Model,
-	//	Messages:         MS,
-	//	MaxTokens:        config.GPTCfg.General.MaxTokens,
-	//	Temperature:      config.GPTCfg.General.Temperature,
-	//	TopP:             config.GPTCfg.General.TopP,
-	//	Stop:             config.GPTCfg.General.Stop,
-	//	PresencePenalty:  config.GPTCfg.General.PresencePenalty,
-	//	FrequencyPenalty: config.GPTCfg.General.FrequencyPenalty,
-	//	User:             msg.Name,
-	//}
 	var postDataTemp interface{}
 	if UseFunction {
 		var postData postDataWithFunction
@@ -62,6 +54,10 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		postDataTemp = postData
 	}
 	postDataBytes, err := json.Marshal(postDataTemp)
+	if err != nil {
+		backend.WebsocketToNLP <- true
+		log.Println(err)
+	}
 	req, _ := http.NewRequest("POST", OpenAIChatUrl, bytes.NewBuffer(postDataBytes))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+config.GPTCfg.OpenAi.ApiKey)
@@ -94,6 +90,15 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		log.Println("OpenAI API调用失败，返回内容：", string(body))
 		return
 	}
+
+	//检查是否使用函数调用
+	if openAiRcv.Choices[0].FinishReason == "function_call" {
+		openAiRcv = secondRequest(postDataTemp.(postDataWithFunction), openAiRcv)
+		if reflect.ValueOf(openAiRcv).IsZero() {
+			return
+		}
+	}
+
 	log.Println("openai生成内容：", openAiRcv.Choices[0].Message.Content)
 	openAiRcv.Choices[0].Message.Content = strings.Replace(openAiRcv.Choices[0].Message.Content, "\n\n", "", 1)
 	log.Printf("Model: %s TotalTokens: %d+%d=%d", openAiRcv.Model, openAiRcv.Usage.PromptTokens, openAiRcv.Usage.CompletionTokes, openAiRcv.Usage.TotalTokens)
@@ -124,4 +129,69 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	out.PutOutMsg(&Msg)
 	time.Sleep(20 * time.Second)
 	return
+}
+
+// 使用函数，进行第二次调用
+func secondRequest(firstRequest postDataWithFunction, firstResp OpenAiRcv) OpenAiRcv {
+	funcName := firstResp.Choices[0].Message.FunctionCall.Name
+	// 定义一个正则表达式，用于匹配每一对双引号中间的内容
+	pattern := `"(.*?)"`
+
+	// 使用正则表达式解析 JSON 字符串中的字段值
+	r := regexp.MustCompile(pattern)
+	matches := r.FindAllStringSubmatch(firstResp.Choices[0].Message.FunctionCall.Arguments, -1)
+
+	// 遍历字符串切片，并取出所有偶数位置上的元素
+	var values []string
+	for i, match := range matches {
+		if i%2 == 1 { // 只保留偶数位置上的元素
+			values = append(values, match[1])
+		}
+	}
+	result := function.GetFunctionResult(funcName, values)
+	ms := RequestMessages{
+		Role:    "function",
+		Name:    funcName,
+		Content: result,
+	}
+	firstRequest.Messages = append(firstRequest.Messages, ms)
+	postDataBytes, err := json.Marshal(firstRequest)
+	if err != nil {
+		backend.WebsocketToNLP <- true
+		log.Println(err)
+		return OpenAiRcv{}
+	}
+	req, _ := http.NewRequest("POST", OpenAIChatUrl, bytes.NewBuffer(postDataBytes))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+config.GPTCfg.OpenAi.ApiKey)
+	client, err := proxy.Client()
+	if err != nil {
+		backend.WebsocketToNLP <- true
+		log.Println(err)
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		backend.WebsocketToNLP <- true
+		log.Println(err)
+		return OpenAiRcv{}
+	}
+	defer resp.Body.Close()
+	if resp == nil {
+		backend.WebsocketToNLP <- true
+		log.Println("response is nil")
+		return OpenAiRcv{}
+	}
+	body, _ := io.ReadAll(resp.Body)
+	var openAiRcv OpenAiRcv
+	err = json.Unmarshal(body, &openAiRcv)
+	if err != nil {
+		log.Println(err)
+		return OpenAiRcv{}
+	}
+	if len(openAiRcv.Choices) == 0 {
+		backend.WebsocketToNLP <- true
+		log.Println("OpenAI API调用失败，返回内容：", string(body))
+		return OpenAiRcv{}
+	}
+	return openAiRcv
 }
