@@ -7,9 +7,10 @@ import memory_gpt "GoTuber/MEMORY/NLPmodel/gpt"
 
 // 获取记忆。索引0表示信息。
 func getMemory(ms []string) string {
+	//调用memory模块实现记忆查询
 	chat := memory_gpt.Chat{
 		Human: ms[0],
 	}
 	user, text := chat.GetMemory()
-	return user + "说" + text
+	return user + "说：" + text
 }

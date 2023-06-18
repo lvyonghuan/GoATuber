@@ -24,12 +24,6 @@ import (
 
 // GenerateTextByOpenAI 文本请求
 func GenerateTextByOpenAI(msg *model.Msg) {
-	messages := &RequestMessages{
-		Role:    "user",
-		Content: msg.Name + "说：" + msg.Msg,
-		Name:    "system",
-	}
-	MS = append(MS, *messages)
 	var postDataTemp interface{}
 	if function.UseFunction {
 		var postData postDataWithFunction
@@ -78,8 +72,6 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		return
 	}
 
-	log.Println(postDataTemp)
-	log.Println(openAiRcv.Choices[0])
 	//检查是否使用函数调用
 	if openAiRcv.Choices[0].FinishReason == "function_call" {
 		openAiRcv = secondRequest(postDataTemp.(postDataWithFunction), openAiRcv)
@@ -105,7 +97,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 			Human: msg.Msg,
 			AI:    "",
 		}
-		memory.UserName = "你"
+		memory.UserName = msg.Name
 		memory.Type = "chat"
 		memory.Namespace = "live"
 		memory.AI = openAiRcv.Choices[0].Message.Content
@@ -142,6 +134,10 @@ func secondRequest(firstRequest postDataWithFunction, firstResp OpenAiRcv) OpenA
 			values = append(values, match[1])
 		}
 	}
+	if values == nil {
+		log.Println("函数调用内容解析失败")
+		return OpenAiRcv{}
+	}
 	result := function.GetFunctionResult(funcName, values)
 	ms := RequestMessages{
 		Role:    "function",
@@ -149,7 +145,18 @@ func secondRequest(firstRequest postDataWithFunction, firstResp OpenAiRcv) OpenA
 		Content: result,
 	}
 	firstRequest.Messages = append(firstRequest.Messages, ms)
-	postDataBytes, err := json.Marshal(firstRequest)
+	tempRequest := postDataWithoutFunction{
+		Model:            firstRequest.Model,
+		Messages:         firstRequest.Messages,
+		MaxTokens:        firstRequest.MaxTokens,
+		Temperature:      firstRequest.Temperature,
+		TopP:             firstRequest.TopP,
+		Stop:             firstRequest.Stop,
+		PresencePenalty:  firstRequest.PresencePenalty,
+		FrequencyPenalty: firstRequest.FrequencyPenalty,
+		User:             firstRequest.User,
+	}
+	postDataBytes, err := json.Marshal(tempRequest)
 	if err != nil {
 		backend.WebsocketToNLP <- true
 		log.Println(err)

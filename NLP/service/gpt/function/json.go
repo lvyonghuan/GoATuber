@@ -17,7 +17,7 @@ func InitFunctionJson() {
 	if MEMORY.MemoryCfg.IsUse {
 		getMemoryJs := getMemoryJson{
 			Name:        "getMemory",
-			Description: "获取关于弹幕的历史记录。如果有必要可以使用。",
+			Description: "获取关于弹幕的历史记录。如果问题可能涉及到关于你个人的历史信息可以使用。",
 			Parameters: struct {
 				Type       string `json:"type"`
 				Properties struct {
@@ -31,7 +31,7 @@ func InitFunctionJson() {
 		}
 		getMemoryJs.Parameters.Type = "object"
 		getMemoryJs.Parameters.Properties.Chat.Type = "string"
-		getMemoryJs.Parameters.Properties.Chat.Description = "对user信息的提炼"
+		getMemoryJs.Parameters.Properties.Chat.Description = "对user所发送的信息的提炼"
 		getMemoryJs.Parameters.Required = append(getMemoryJs.Parameters.Required, "Chat")
 		addFuncJson(getMemoryJs)
 	}
