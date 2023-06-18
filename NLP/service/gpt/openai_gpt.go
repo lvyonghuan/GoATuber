@@ -33,6 +33,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		var postData postDataWithoutFunction
 		postData.initRequestModel(msg)
 		postDataTemp = postData
+
 	}
 	postDataBytes, err := json.Marshal(postDataTemp)
 	if err != nil {

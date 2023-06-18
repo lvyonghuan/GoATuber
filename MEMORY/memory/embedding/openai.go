@@ -53,12 +53,14 @@ func OpenaiEmbedding(msg string) []float32 {
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("embedding生成错误:", err)
+		return nil
 	}
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("embedding生成错误:", err)
+		return nil
 	}
 	var reps ReqsFromOpenai
 	err = json.Unmarshal(bodyText, &reps)
