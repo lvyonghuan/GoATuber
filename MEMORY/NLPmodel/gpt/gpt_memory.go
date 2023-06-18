@@ -28,7 +28,7 @@ func (chat Chat) GetMemory() (user, text string) {
 	if vector == nil {
 		return "", ""
 	}
-	memory := pinecone.PineconeQuery("chat", "live", vector)
+	memory := pinecone.PineconeQuery("chat", "live", vector) //什么默认字段
 	if memory == nil {
 		return "", ""
 	}

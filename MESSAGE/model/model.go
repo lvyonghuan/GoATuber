@@ -14,6 +14,7 @@ type Chat struct {
 type Msg struct {
 	Msg   string
 	Name  string
+	Uid   string
 	IsUse bool
 	Mu    sync.Mutex
 }
