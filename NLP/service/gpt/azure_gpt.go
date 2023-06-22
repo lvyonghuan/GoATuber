@@ -17,6 +17,8 @@ import (
 	"strings"
 )
 
+//TODO:暂停维护，等azure同步function call再说
+
 func GenerateTextByAzureOpenAI(msg *model.Msg) {
 	url := config.GPTCfg.Azure.EndPoint + "openai/deployments/" + config.GPTCfg.Azure.DeploymentID + "/chat/completions?api-version=" + config.GPTCfg.Azure.ApiVersion
 	//记忆相关
@@ -25,7 +27,7 @@ func GenerateTextByAzureOpenAI(msg *model.Msg) {
 		AI:    "",
 	}
 	if MEMORY.MemoryCfg.IsUse {
-		user, text := memory.GetMemory()
+		user, text, _ := memory.GetMemory()
 		mem := RequestMessages{
 			Role:    "system",
 			Content: "你是一个虚拟主播。你可以选择利用这些记忆，当记忆无关的时候，也可以选择忽略。请不要在发言中直接提到“记忆”。以下是记忆部分。" + user + "说，" + text,
