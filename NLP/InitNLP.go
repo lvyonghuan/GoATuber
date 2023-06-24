@@ -20,4 +20,7 @@ func InitNLP() {
 		config.InitGPTConfig()
 		gpt.InitRole()
 	}
+	if config.NLPCfg.Nlp.UseLocalModel {
+		config.InitNLPLocalConfig()
+	}
 }
