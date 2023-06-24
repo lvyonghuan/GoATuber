@@ -1,6 +1,7 @@
 package service
 
 import (
+	"GoTuber/NLP/service/local"
 	"GoTuber/frontend/live2d_backend"
 	"container/list"
 	"log"
@@ -112,6 +113,8 @@ func HandelMessage() {
 				gpt.GenerateTextByOpenAI(&HandelMsg)
 			} else if config.NLPCfg.Nlp.UseAzureGPT {
 				gpt.GenerateTextByAzureOpenAI(&HandelMsg)
+			} else if config.NLPCfg.Nlp.UseLocalModel {
+				local.Connect(&HandelMsg)
 			} else if config.NLPCfg.Nlp.UseOther {
 				//TODO：以后再说
 			}
