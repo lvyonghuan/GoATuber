@@ -34,6 +34,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		var postData postDataWithoutFunction
 		postData.initRequestModel(msg)
 		postDataTemp = postData
+
 	}
 	//构造请求体
 	postDataBytes, err := json.Marshal(postDataTemp)

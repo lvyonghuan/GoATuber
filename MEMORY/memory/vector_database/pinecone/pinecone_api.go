@@ -91,10 +91,16 @@ func PineconeQuery(filter, namespace string, vector []float32) []string {
 	}
 	res, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
+		log.Println("pinecone调用错误：", err)
 		return nil
 	}
-	defer res.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}(res.Body)
 	body, _ := io.ReadAll(res.Body)
 
 	var resp QueryResp
@@ -150,7 +156,7 @@ func (msg Input) PineconeStore() {
 	}
 	res, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
+		log.Println("pinecone调用错误：", err)
 		return
 	}
 

@@ -13,7 +13,7 @@ func Client() (http.Client, error) {
 	// 设置clash代理
 	uri, err := url.Parse(Cfg.Proxy.ProxyUrl)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return http.Client{}, nil
 	}
 	client := http.Client{
