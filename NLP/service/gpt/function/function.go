@@ -11,6 +11,6 @@ func getMemory(ms []string) string {
 	chat := memory_gpt.Chat{
 		Human: ms[0],
 	}
-	user, text := chat.GetMemory()
-	return user + "说：" + text
+	human, ai, user := chat.GetMemory()
+	return "user:" + user + "说：" + human + "assistant:" + ai
 }

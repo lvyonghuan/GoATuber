@@ -25,6 +25,7 @@ import (
 // GenerateTextByOpenAI 文本请求
 func GenerateTextByOpenAI(msg *model.Msg) {
 	var postDataTemp interface{}
+	//函数调用流程
 	if function.UseFunction {
 		var postData postDataWithFunction
 		postData.initRequestModel(msg)
@@ -35,6 +36,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		postDataTemp = postData
 
 	}
+	//构造请求体
 	postDataBytes, err := json.Marshal(postDataTemp)
 	if err != nil {
 		backend.WebsocketToNLP <- true
@@ -43,6 +45,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	req, _ := http.NewRequest("POST", OpenAIChatUrl, bytes.NewBuffer(postDataBytes))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+config.GPTCfg.OpenAi.ApiKey)
+	//发送请求
 	client, err := proxy.Client()
 	if err != nil {
 		backend.WebsocketToNLP <- true
@@ -54,6 +57,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 		log.Println(err)
 		return
 	}
+	//处理返回
 	defer resp.Body.Close()
 	if resp == nil {
 		backend.WebsocketToNLP <- true
@@ -96,12 +100,11 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	if MEMORY.MemoryCfg.IsUse {
 		memory := memory_gpt.Chat{
 			Human: msg.Msg,
-			AI:    "",
+			AI:    openAiRcv.Choices[0].Message.Content,
 		}
 		memory.UserName = msg.Name
 		memory.Type = "chat"
 		memory.Namespace = "live"
-		memory.AI = openAiRcv.Choices[0].Message.Content
 		go memory.StoreMessage()
 		//cleanMemoryMessage() //清除这一次对话的记忆内容
 	}
@@ -157,6 +160,7 @@ func secondRequest(firstRequest postDataWithFunction, firstResp OpenAiRcv) OpenA
 		FrequencyPenalty: firstRequest.FrequencyPenalty,
 		User:             firstRequest.User,
 	}
+	log.Println(tempRequest)
 	postDataBytes, err := json.Marshal(tempRequest)
 	if err != nil {
 		backend.WebsocketToNLP <- true

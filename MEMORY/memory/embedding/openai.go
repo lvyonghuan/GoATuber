@@ -47,7 +47,8 @@ func OpenaiEmbedding(msg string) []float32 {
 	}
 	req, err := http.NewRequest("POST", "https://api.openai.com/v1/embeddings", bytes.NewBuffer(data))
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return nil
 	}
 	req.Header.Set("Authorization", "Bearer "+config.GPTCfg.OpenAi.ApiKey)
 	req.Header.Set("Content-Type", "application/json")
