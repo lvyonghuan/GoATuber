@@ -17,7 +17,7 @@ type OutPut struct {
 func (*OutPut) AIFilter(Msg *OutPut) {
 	msg := Msg.Msg
 	filter := New()
-	err := filter.LoadWordDict("MESSAGE/filter/dict/dict.txt", 0)
+	err := filter.LoadWordDict("config/MESSAGE/filter/dict/dict.txt", 0)
 	if err != nil {
 		log.Println(err)
 		return
