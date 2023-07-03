@@ -3,7 +3,13 @@ package gpt
 import (
 	"GoTuber/MEMORY"
 	memory_gpt "GoTuber/MEMORY/NLPmodel/gpt"
+	sensitive "GoTuber/MESSAGE/filter"
+	"GoTuber/MESSAGE/model"
+	"GoTuber/NLP/config"
 	"GoTuber/NLP/service/gpt/function"
+	"GoTuber/NLP/service/out"
+	backend "GoTuber/frontend/live2d_backend"
+	"GoTuber/proxy"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -12,14 +18,6 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
-	"time"
-
-	sensitive "GoTuber/MESSAGE/filter"
-	"GoTuber/MESSAGE/model"
-	"GoTuber/NLP/config"
-	"GoTuber/NLP/service/out"
-	backend "GoTuber/frontend/live2d_backend"
-	"GoTuber/proxy"
 )
 
 // GenerateTextByOpenAI 文本请求
@@ -117,7 +115,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	var Msg sensitive.OutPut
 	Msg.Msg = openAiRcv.Choices[0].Message.Content
 	out.PutOutMsg(&Msg)
-	time.Sleep(20 * time.Second)
+	//time.Sleep(20 * time.Second)
 	return
 }
 
