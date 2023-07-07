@@ -2,7 +2,7 @@ package azure
 
 import (
 	sensitive "GoTuber/MESSAGE/filter"
-	"GoTuber/SPEECH/config"
+	"GoTuber/VOICE/config"
 	"bytes"
 	"encoding/base64"
 	"fmt"

@@ -2,7 +2,7 @@ package talkinggenie
 
 import (
 	sensitive "GoTuber/MESSAGE/filter"
-	"GoTuber/SPEECH/config"
+	"GoTuber/VOICE/config"
 	"strconv"
 )
 

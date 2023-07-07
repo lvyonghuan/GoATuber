@@ -1,7 +1,7 @@
 package azure
 
 import (
-	"GoTuber/SPEECH/config"
+	"GoTuber/VOICE/config"
 	"io"
 	"log"
 	"net/http"

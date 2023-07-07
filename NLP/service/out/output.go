@@ -3,7 +3,7 @@ package out
 import (
 	"GoTuber/MESSAGE/filter"
 	"GoTuber/MOOD"
-	"GoTuber/SPEECH/service"
+	"GoTuber/VOICE/service"
 	"GoTuber/frontend/live2d_backend"
 )
 

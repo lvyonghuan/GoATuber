@@ -2,7 +2,7 @@ package xfyun
 
 import (
 	sensitive "GoTuber/MESSAGE/filter"
-	"GoTuber/SPEECH/config"
+	"GoTuber/VOICE/config"
 	"encoding/base64"
 	"encoding/json"
 	"log"

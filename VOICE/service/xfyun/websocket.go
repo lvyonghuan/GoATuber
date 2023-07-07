@@ -1,7 +1,7 @@
 package xfyun
 
 import (
-	"GoTuber/SPEECH/config"
+	"GoTuber/VOICE/config"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"

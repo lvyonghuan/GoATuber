@@ -29,8 +29,8 @@ type Xfyun struct {
 var XFCfg Xfyun
 
 func InitXFConfig() {
-	if _, err := os.Stat("config/SPEECH/XFConfig.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("config/SPEECH/XFConfig.cfg")
+	if _, err := os.Stat("config/VOICE/XFConfig.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("config/VOICE/XFConfig.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -68,7 +68,7 @@ func InitXFConfig() {
 	}
 	viper.SetConfigName("XFConfig.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./config/SPEECH") // 指定查找配置文件的路径
+	viper.AddConfigPath("./config/VOICE") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read frontend failed: %v", err)

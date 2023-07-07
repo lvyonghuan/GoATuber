@@ -31,8 +31,8 @@ type AzureConfig struct {
 var AzureCfg AzureConfig
 
 func InitAzureConfig() {
-	if _, err := os.Stat("config/SPEECH/AzureConfig.cfg"); os.IsNotExist(err) {
-		f, err := os.Create("config/SPEECH/AzureConfig.cfg")
+	if _, err := os.Stat("config/VOICE/AzureConfig.cfg"); os.IsNotExist(err) {
+		f, err := os.Create("config/VOICE/AzureConfig.cfg")
 		if err != nil {
 			log.Println(err)
 		}
@@ -70,7 +70,7 @@ func InitAzureConfig() {
 	}
 	viper.SetConfigName("AzureConfig.cfg")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./config/SPEECH") // 指定查找配置文件的路径
+	viper.AddConfigPath("./config/VOICE") // 指定查找配置文件的路径
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("read frontend failed: %v", err)
