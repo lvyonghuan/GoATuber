@@ -10,8 +10,11 @@ import (
 
 //建立与Live2D模块的前后端交互
 
+//TODO:有时间迟早得重构整个项目。1.把各个http接口调用程序重新归类;2.改成context控制。不得不说这两个月还是学了点东西。
+
 var done = make(chan bool, 1)
-var WebsocketToNLP = make(chan bool, 1) //控制信息流入的速度
+var WebsocketToNLP = make(chan bool, 1)    //控制信息流入的速度
+var WebsocketToSpeech = make(chan bool, 1) // 控制语音对话交流
 
 var Upgrade = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -71,8 +74,11 @@ func read(conn *websocket.Conn) {
 			done <- true
 			break
 		}
-		if string(i) == "0" {
+		if string(i) == "0" { //朗读结束标志
 			WebsocketToNLP <- true
+			continue
+		} else if string(i) == "1" { //收到语音消息
+			WebsocketToSpeech <- true
 			continue
 		} else {
 			log.Println("错误代码：", string(i))

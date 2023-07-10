@@ -1,5 +1,7 @@
 package MESSAGE
 
+//处理直播消息获取模块与对话生成模块之间的消息传递逻辑
+
 import (
 	"GoTuber/MESSAGE/model"
 	"GoTuber/NLP/service"
@@ -13,7 +15,9 @@ func GetMessage() {
 		select {
 		//读取到的消息流向过滤器进行过滤
 		case msg := <-ChatToFilter:
-			go FILTER(msg)
+			if messageCfg.IsGetChat { //如果不启用弹幕消息，则直接放掉
+				go FILTER(msg)
+			}
 		//消息从过滤器流向NLP模块
 		case msg := <-FilterToNLP:
 			service.GetMessageFromChat(msg)

@@ -2,6 +2,7 @@ package service
 
 import (
 	"GoTuber/NLP/service/local"
+	"GoTuber/SPEECH"
 	"GoTuber/frontend/live2d_backend"
 	"container/list"
 	"log"
@@ -67,10 +68,22 @@ func ChooseMessage() {
 	}()
 	for {
 		select {
+		case <-backend.WebsocketToSpeech:
+			if !HandelMsg.IsUse {
+				HandelMsg.Mu.Lock()
+				SPEECH.GetVoice(&HandelMsg)
+				if HandelMsg.Msg == "" {
+					HandelMsg.Mu.Unlock()
+					continue
+				}
+				HandelMsg.IsUse = true
+				HandelMsg.Mu.Unlock()
+				ChooseToReadFlag <- true
+				continue
+			}
 		case <-GetToChooseFlag:
 			if !HandelMsg.IsUse {
-				//优先选择sc队列中消息
-				if scMsgList.Len() > 0 {
+				if scMsgList.Len() > 0 { //在弹幕类消息中，优先选择sc队列中消息
 					HandelMsg.Mu.Lock()
 					HandelMsg.Msg = scMsgList.Front().Value.(*model.Chat).Message
 					HandelMsg.Name = scMsgList.Front().Value.(*model.Chat).ChatName

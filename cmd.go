@@ -6,6 +6,7 @@ import (
 	"GoTuber/MESSAGE"
 	"GoTuber/MOOD"
 	"GoTuber/NLP"
+	"GoTuber/SPEECH"
 	"GoTuber/VOICE"
 	"GoTuber/frontend/live2d_backend"
 	"GoTuber/proxy"
@@ -24,13 +25,15 @@ func main() {
 	//}
 	//
 	log.Println("Go!")
-	go MESSAGE.GetMessage()
+	MESSAGE.InitConfig()
 	proxy.InitProxyConfig()
 	MEMORY.InitMemory()
 	NLP.InitNLP()
 	VOICE.InitVOICE()
+	SPEECH.InitConfig()
 	go MOOD.InitMOOD()
 	go backend.Init()
+	go MESSAGE.GetMessage()
 	CHAT.InitChat()
 	//
 	//pprof.StopCPUProfile()
