@@ -63,7 +63,9 @@ type为1时，代表生成成功。message字段为AI生成的回应。
 
 ---
 
-关于这个项目最开始的背景可以参看[old_README.md](https://github.com/lvyonghuan/GoATuber/blob/main/old_README.md)。目前项目的主要维护者都是大一在读，笔者开始写代码也就一年前不到的时间，有些地方可能（绝对）会写得很丑陋。（而且考试周快到了，我们可能抽不出很多时间来一直优化这个项目）
+*目前项目维护者都在修炼当中，更新暂停一段时间。但是如果使用中产生了问题要提issue或者想提pull request都是欢迎的。*
+
+关于这个项目最开始的背景可以参看[old_README.md](https://github.com/lvyonghuan/GoATuber/blob/main/old_README.md)。目前项目的主要维护者都是大一在读，笔者开始写代码也就一年前不到的时间，有些地方可能（绝对）会写得很丑陋。
 
 如果有人能够pull requests，为这个项目做优化或者添加功能，我会很感激的。
 
@@ -74,3 +76,4 @@ type为1时，代表生成成功。message字段为AI生成的回应。
 
 TODO:
 - 语音转文字功能——也就是说可以对话了
+- 支持VRM模型
