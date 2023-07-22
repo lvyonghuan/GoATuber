@@ -12,6 +12,16 @@ import (
 	"net/http"
 )
 
+// Input 传入结构体
+type Input struct {
+	Type      string
+	Namespace string
+	UserName  string
+	Human     string
+	AI        string
+	Vector    []float32
+}
+
 // QueryResp 请求返回
 type QueryResp struct {
 	Matches   []Matches `json:"matches"`
@@ -79,8 +89,18 @@ func PineconeQuery(filter, namespace string, vector []float32) []string {
 	if err != nil {
 		log.Println(err)
 	}
-	res, _ := client.Do(req)
-	defer res.Body.Close()
+	res, err := client.Do(req)
+	if err != nil {
+		log.Println("pinecone调用错误：", err)
+		return nil
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}(res.Body)
 	body, _ := io.ReadAll(res.Body)
 
 	var resp QueryResp
@@ -97,7 +117,7 @@ func PineconeQuery(filter, namespace string, vector []float32) []string {
 }
 
 // PineconeStore 存储数据
-func PineconeStore(typ, text, user, namespace string, vector []float32) {
+func (msg Input) PineconeStore() {
 	url := "https://" + pineconeCfg.Url + "/vectors/upsert"
 
 	id := generateRandomString(10)
@@ -108,15 +128,16 @@ func PineconeStore(typ, text, user, namespace string, vector []float32) {
 		Vectors: []Vector{
 			{
 				ID:     id,
-				Values: vector,
+				Values: msg.Vector,
 				Metadata: map[string]any{
-					"Type": typ,
-					"Text": text,
-					"User": user,
+					"Type":  msg.Type,
+					"Human": msg.Human,
+					"AI":    msg.AI,
+					"User":  msg.UserName,
 				},
 			},
 		},
-		Namespace: namespace,
+		Namespace: msg.Namespace,
 	}
 	payload, err := json.Marshal(data)
 	if err != nil {
@@ -133,7 +154,11 @@ func PineconeStore(typ, text, user, namespace string, vector []float32) {
 	if err != nil {
 		log.Println(err)
 	}
-	res, _ := client.Do(req)
+	res, err := client.Do(req)
+	if err != nil {
+		log.Println("pinecone调用错误：", err)
+		return
+	}
 
 	defer res.Body.Close()
 	body, _ := io.ReadAll(res.Body)

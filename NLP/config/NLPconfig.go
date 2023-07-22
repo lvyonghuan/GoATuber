@@ -9,9 +9,10 @@ import (
 
 type NLPConfig struct {
 	Nlp struct {
-		UseGPT      bool `mapstructure:"use_gpt"`
-		UseAzureGPT bool `mapstructure:"use_azure_gpt"`
-		UseOther    bool `mapstructure:"use_other"`
+		UseGPT        bool `mapstructure:"use_gpt"`
+		UseAzureGPT   bool `mapstructure:"use_azure_gpt"`
+		UseLocalModel bool `mapstructure:"use_local_model"`
+		UseOther      bool `mapstructure:"use_other"`
 	}
 }
 
@@ -31,6 +32,8 @@ func InitNLPConfig() {
 			"use_gpt = true\n" +
 			"# 是否使用azure GPT\n" +
 			"use_azure_gpt = false\n" +
+			"# 是否使用本地模型\n" +
+			"use_local_model = false\n" +
 			"# 是否使用其他模型\n" +
 			"use_other = false\n\n"))
 		if err != nil {

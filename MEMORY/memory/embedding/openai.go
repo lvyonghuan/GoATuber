@@ -47,18 +47,21 @@ func OpenaiEmbedding(msg string) []float32 {
 	}
 	req, err := http.NewRequest("POST", "https://api.openai.com/v1/embeddings", bytes.NewBuffer(data))
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return nil
 	}
 	req.Header.Set("Authorization", "Bearer "+config.GPTCfg.OpenAi.ApiKey)
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("embedding生成错误:", err)
+		return nil
 	}
 	defer resp.Body.Close()
 	bodyText, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("embedding生成错误:", err)
+		return nil
 	}
 	var reps ReqsFromOpenai
 	err = json.Unmarshal(bodyText, &reps)

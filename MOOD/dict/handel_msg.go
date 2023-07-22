@@ -16,7 +16,7 @@ var getWords = make(chan []string, 1)
 func HandelMsg(Msg *sensitive.OutPut) {
 	msg := Msg.Msg
 	search := sensitive.New()
-	err := search.LoadWordDict("MOOD/dict/情感词汇本体.txt", 0) //捏麻的，别问我为什么要用两次AC自动机
+	err := search.LoadWordDict("config/MOOD/dict/情感词汇本体.txt", 0) //捏麻的，别问我为什么要用两次AC自动机
 	if err != nil {
 		log.Printf("情感字典加载失败：%v", err)
 		return
@@ -71,7 +71,7 @@ func HandelMsg(Msg *sensitive.OutPut) {
 
 func Search() {
 	search := sensitive.New()
-	err := search.LoadWordDict("MOOD/dict/情感词汇本体.txt", 1)
+	err := search.LoadWordDict("config/MOOD/dict/情感词汇本体.txt", 1)
 	if err != nil {
 		log.Printf("情感字典加载失败：%v", err)
 		return
