@@ -40,7 +40,8 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	postDataBytes, err := json.Marshal(postDataTemp)
 	if err != nil {
 		backend.WebsocketToNLP <- true
-		log.Println(err)
+		log.Println("json序列化错误：", err)
+		return
 	}
 	req, _ := http.NewRequest("POST", OpenAIChatUrl, bytes.NewBuffer(postDataBytes))
 	req.Header.Set("Content-Type", "application/json")
@@ -48,13 +49,13 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	//发送请求
 	client, err := proxy.Client()
 	if err != nil {
-		backend.WebsocketToNLP <- true
-		log.Println(err)
+		log.Println("申请代理错误：", err)
+		client = http.Client{}
 	}
 	resp, err := client.Do(req)
 	if err != nil {
 		backend.WebsocketToNLP <- true
-		log.Println(err)
+		log.Println("请求错误：", err)
 		return
 	}
 	//处理返回
@@ -69,7 +70,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	err = json.Unmarshal(body, &openAiRcv)
 	if err != nil {
 		backend.WebsocketToNLP <- true
-		log.Println(err)
+		log.Println("响应体反序列化错误：", err)
 		return
 	}
 	if len(openAiRcv.Choices) == 0 {
@@ -163,7 +164,6 @@ func secondRequest(firstRequest postDataWithFunction, firstResp OpenAiRcv) OpenA
 	}
 	postDataBytes, err := json.Marshal(tempRequest)
 	if err != nil {
-		backend.WebsocketToNLP <- true
 		log.Println(err)
 		return OpenAiRcv{}
 	}
@@ -172,18 +172,15 @@ func secondRequest(firstRequest postDataWithFunction, firstResp OpenAiRcv) OpenA
 	req.Header.Set("Authorization", "Bearer "+config.GPTCfg.OpenAi.ApiKey)
 	client, err := proxy.Client()
 	if err != nil {
-		backend.WebsocketToNLP <- true
 		log.Println(err)
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		backend.WebsocketToNLP <- true
 		log.Println(err)
 		return OpenAiRcv{}
 	}
 	defer resp.Body.Close()
 	if resp == nil {
-		backend.WebsocketToNLP <- true
 		log.Println("response is nil")
 		return OpenAiRcv{}
 	}
@@ -195,7 +192,6 @@ func secondRequest(firstRequest postDataWithFunction, firstResp OpenAiRcv) OpenA
 		return OpenAiRcv{}
 	}
 	if len(openAiRcv.Choices) == 0 {
-		backend.WebsocketToNLP <- true
 		log.Println("OpenAI API调用失败，返回内容：", string(body))
 		return OpenAiRcv{}
 	}
