@@ -3,7 +3,6 @@ package memory_gpt
 import (
 	"GoTuber/MEMORY/memory/embedding"
 	"GoTuber/MEMORY/memory/vector_database/pinecone"
-	"log"
 )
 
 type Chat struct {
@@ -41,6 +40,5 @@ func (chat Chat) GetMemory() (humanText, aiText, user string) {
 	if memory == nil {
 		return "", "", ""
 	}
-	log.Println(memory)
 	return memory[1], memory[0], memory[3] //索引0：AI的回答;1：用户提问;2:类型;3:用户名
 }

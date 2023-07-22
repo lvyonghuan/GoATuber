@@ -63,7 +63,7 @@ type Vector struct {
 
 // PineconeQuery 请求相似数据
 func PineconeQuery(filter, namespace string, vector []float32) []string {
-	url := "https://" + pineconeCfg.Url + "/query"
+	url := pineconeCfg.Url + "/query"
 	data := QueryPayload{
 		Filter: map[string]any{
 			"Type": filter,
