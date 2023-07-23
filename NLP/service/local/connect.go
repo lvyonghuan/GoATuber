@@ -25,7 +25,7 @@ func Connect(msg *model.Msg) {
 		log.Println("json序列化错误：", err)
 		return
 	}
-	req, _ := http.NewRequest("POST", config.NLPLocalCfg.RequestUrl, bytes.NewBuffer(requestJson))
+	req, _ := http.NewRequest("GET", config.NLPLocalCfg.RequestUrl, bytes.NewBuffer(requestJson))
 	req.Header.Set("Content-Type", "application/json")
 	client := http.Client{}
 	resp, err := client.Do(req)
