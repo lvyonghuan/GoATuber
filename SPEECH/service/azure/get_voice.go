@@ -5,8 +5,8 @@ import (
 	"GoTuber/SPEECH/config"
 	"bytes"
 	"encoding/base64"
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -16,7 +16,7 @@ func GetVoice(msg *sensitive.OutPut) {
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", config.AzureCfg.Azure.EndPointForVoice, nil)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 	req.Header.Add("X-Microsoft-OutputFormat", "riff-24khz-16bit-mono-pcm")
 	req.Header.Add("Content-Type", "application/ssml+xml")
@@ -39,7 +39,7 @@ func GetVoice(msg *sensitive.OutPut) {
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	defer resp.Body.Close()
@@ -47,7 +47,7 @@ func GetVoice(msg *sensitive.OutPut) {
 	// Read response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	msg.Mu.Lock()

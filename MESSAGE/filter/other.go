@@ -2,7 +2,6 @@ package sensitive
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
 	"net/http"
 )
@@ -11,11 +10,7 @@ import (
 //输入字符串，作为过滤信息。返回布尔量，用于判断是否通过了过滤。
 
 func UserOtherFilter(message string) bool {
-	request, err := json.Marshal(message)
-	if err != nil {
-		return false
-	}
-	req, _ := http.NewRequest("GET", FilterCfg.RequestUrl, bytes.NewBuffer(request))
+	req, _ := http.NewRequest("GET", FilterCfg.RequestUrl, bytes.NewBuffer([]byte(message)))
 	req.Header.Set("Content-Type", "application/json")
 	client := http.Client{}
 	resp, err := client.Do(req)
@@ -27,10 +22,10 @@ func UserOtherFilter(message string) bool {
 		return false
 	}
 	body, _ := io.ReadAll(resp.Body)
-	var response bool
-	err = json.Unmarshal(body, &response)
-	if err != nil {
+	state := string(body)
+	if state == "1" {
+		return true
+	} else {
 		return false
 	}
-	return response
 }
