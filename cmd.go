@@ -4,6 +4,7 @@ import (
 	"GoTuber/CHAT"
 	"GoTuber/MEMORY"
 	"GoTuber/MESSAGE"
+	sensitive "GoTuber/MESSAGE/filter"
 	"GoTuber/MOOD"
 	"GoTuber/NLP"
 	"GoTuber/SPEECH"
@@ -24,6 +25,7 @@ func main() {
 	//}
 	//
 	log.Println("Go!")
+	sensitive.InitConfig()
 	go MESSAGE.GetMessage()
 	proxy.InitProxyConfig()
 	MEMORY.InitMemory()

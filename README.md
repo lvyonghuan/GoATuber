@@ -52,7 +52,7 @@
 
 首先更改[`NLOConfig.cfg`](config/NLP/NLPConfig.cfg)的配置，将`use_local_model`设置为true，其他设置为false。
 
-再在[`localConfig.cfg`](config/NLP/localConfig/localConfig.cfg)中填写通信的请求地址。请事先暴露出要使用模型的API地址。
+再在[`localConfig.cfg`](config/NLP/localConfig/localConfig.cfg)中填写通信的请求地址。请事先暴露出要使用模型的API地址。将以`GET`请求发送以下结构体。
 
 请求发送的body结构如下：
 ```json
