@@ -11,3 +11,8 @@ func cleanMemoryMessage() {
 func cleanAllMessage() {
 	MS = MS[:roleLine]
 }
+
+// 队列式的清除消息。达到token限制之后，清除队首的消息即可。
+func cleanFirstMessage() {
+	MS = append(MS[:roleLine], MS[roleLine+1:]...)
+}
