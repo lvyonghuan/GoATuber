@@ -18,7 +18,7 @@ import (
 	"GoTuber/MESSAGE/model"
 	"GoTuber/NLP/config"
 	"GoTuber/NLP/service/out"
-	backend "GoTuber/frontend/live2d_backend"
+	backend "GoTuber/frontend/model_backend"
 	"GoTuber/proxy"
 )
 

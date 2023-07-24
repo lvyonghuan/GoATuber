@@ -4,7 +4,7 @@ import (
 	"GoTuber/MESSAGE/filter"
 	"GoTuber/MOOD"
 	"GoTuber/SPEECH/service"
-	"GoTuber/frontend/live2d_backend"
+	"GoTuber/frontend/model_backend"
 )
 
 // PutOutMsg 统一将NLP模块的消息向外传递

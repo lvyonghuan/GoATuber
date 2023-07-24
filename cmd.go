@@ -8,7 +8,7 @@ import (
 	"GoTuber/MOOD"
 	"GoTuber/NLP"
 	"GoTuber/SPEECH"
-	"GoTuber/frontend/live2d_backend"
+	"GoTuber/frontend/model_backend"
 	"GoTuber/proxy"
 	"log"
 )

@@ -1,7 +1,7 @@
 package backend
 
 import (
-	"GoTuber/frontend/live2d_backend/get_live2d_model_info"
+	"GoTuber/frontend/model_backend/get_model_info"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 
 func Init() {
 	r := gin.Default()
-	r.GET("/live2d", Start)
+	r.GET("/connect", Start) //启动websocket连接
 	r.Use(static.Serve("/", static.LocalFile("dist", true)))
 	r.NoRoute(func(c *gin.Context) {
 		accept := c.Request.Header.Get("Accept")
@@ -29,21 +29,23 @@ func Init() {
 			c.Writer.Flush()
 		}
 	})
-	r.GET("/get", getModelInfo)
-	r.Run(":9000") //服务在本地9000端口运行
+	r.GET("/get", getModelInfo) //获取模型类型信息
+	r.Run(":9000")              //服务在本地9000端口运行
 }
 
 //ModelInfo初始化内容↓
 
-type modelInfo struct {
-	Name  string  `json:"name"`
-	Mouth float64 `json:"mouth"`
-}
-
 func getModelInfo(c *gin.Context) {
-	name := get_live2d_model_info.GetModelName()
-	if name == "" {
+	const (
+		nil    = 0
+		live2d = 1 //这两个放这里是提醒我的
+		vrm    = 2
+	)
+	var info get_model_info.ModelInfo
+	info.GetModelName()
+	//大概不会有这种情况
+	if info.Type == nil {
 		return
 	}
-	c.JSON(http.StatusOK, name)
+	c.JSON(http.StatusOK, info)
 }

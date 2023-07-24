@@ -8,7 +8,7 @@ import (
 	"GoTuber/NLP/config"
 	"GoTuber/NLP/service/gpt/function"
 	"GoTuber/NLP/service/out"
-	backend "GoTuber/frontend/live2d_backend"
+	backend "GoTuber/frontend/model_backend"
 	"GoTuber/proxy"
 	"bytes"
 	"encoding/json"

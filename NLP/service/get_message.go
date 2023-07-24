@@ -2,7 +2,7 @@ package service
 
 import (
 	"GoTuber/NLP/service/local"
-	"GoTuber/frontend/live2d_backend"
+	"GoTuber/frontend/model_backend"
 	"container/list"
 	"log"
 	"strconv"
