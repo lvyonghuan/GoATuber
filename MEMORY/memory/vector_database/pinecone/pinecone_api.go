@@ -118,7 +118,7 @@ func PineconeQuery(filter, namespace string, vector []float32) []string {
 
 // PineconeStore 存储数据
 func (msg Input) PineconeStore() {
-	url := "https://" + pineconeCfg.Url + "/vectors/upsert"
+	url := pineconeCfg.Url + "/vectors/upsert"
 
 	id := generateRandomString(10)
 	if id == "" {
