@@ -11,7 +11,7 @@ type modelConfig struct {
 }
 
 func GetModelName() string {
-	files, err := os.ReadDir("dist/model")
+	files, err := os.ReadDir("dist/live2d")
 	if err != nil {
 		log.Fatalf("读取文件错误！错误信息：%v", err)
 	}
