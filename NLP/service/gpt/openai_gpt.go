@@ -1,9 +1,6 @@
 package gpt
 
 import (
-	"GoTuber/MEMORY"
-	memory_gpt "GoTuber/MEMORY/NLPmodel/gpt"
-	"GoTuber/NLP/service/gpt/function"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -12,11 +9,13 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
-	"time"
 
+	"GoTuber/MEMORY"
+	memory_gpt "GoTuber/MEMORY/NLPmodel/gpt"
 	sensitive "GoTuber/MESSAGE/filter"
 	"GoTuber/MESSAGE/model"
 	"GoTuber/NLP/config"
+	"GoTuber/NLP/service/gpt/function"
 	"GoTuber/NLP/service/out"
 	backend "GoTuber/frontend/model_backend"
 	"GoTuber/proxy"
@@ -119,7 +118,7 @@ func GenerateTextByOpenAI(msg *model.Msg) {
 	var Msg sensitive.OutPut
 	Msg.Msg = openAiRcv.Choices[0].Message.Content
 	out.PutOutMsg(&Msg)
-	time.Sleep(20 * time.Second)
+	//time.Sleep(20 * time.Second)
 	return
 }
 

@@ -2,10 +2,11 @@
 package backend
 
 import (
-	sensitive "GoTuber/MESSAGE/filter"
-	"GoTuber/MOOD"
 	"math/rand"
 	"time"
+
+	sensitive "GoTuber/MESSAGE/filter"
+	"GoTuber/MOOD"
 )
 
 var OutPutChan = make(chan OutMessage, 1)

@@ -1,12 +1,14 @@
 package backend
 
 import (
-	"GoTuber/frontend/model_backend/get_model_info"
-	"github.com/gin-contrib/static"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 	"strings"
+
+	"GoTuber/frontend/model_backend/get_model_info"
+
+	"github.com/gin-contrib/static"
+	"github.com/gin-gonic/gin"
 )
 
 func Init() {
