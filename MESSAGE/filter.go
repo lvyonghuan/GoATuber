@@ -1,9 +1,10 @@
 package MESSAGE
 
 import (
+	"log"
+
 	"GoTuber/MESSAGE/filter"
 	"GoTuber/MESSAGE/model"
-	"log"
 )
 
 // FILTER 过滤器，基于importcjj/sensitive实现，证书在filter目录下。使用协程进行过滤后，汇总到一条队列里。

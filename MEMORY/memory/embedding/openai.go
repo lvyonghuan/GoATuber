@@ -1,13 +1,14 @@
 package embedding
 
 import (
-	"GoTuber/NLP/config"
-	"GoTuber/proxy"
 	"bytes"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
+
+	"GoTuber/NLP/config"
+	"GoTuber/proxy"
 )
 
 type ReqsFromOpenai struct {

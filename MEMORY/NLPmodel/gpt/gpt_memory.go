@@ -1,9 +1,10 @@
 package memory_gpt
 
 import (
+	"log"
+
 	"GoTuber/MEMORY/memory/embedding"
 	"GoTuber/MEMORY/memory/vector_database/pinecone"
-	"log"
 )
 
 type Chat struct {
