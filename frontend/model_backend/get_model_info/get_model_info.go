@@ -16,7 +16,7 @@ func (info *ModelInfo) GetModelName() {
 		live2d = 1
 		vrm    = 2
 	)
-	files, err := os.ReadDir("dist/vrm")
+	files, err := os.ReadDir("dist/model")
 	if err != nil {
 		log.Fatalf("读取文件错误！错误信息：%v", err)
 	}
