@@ -14,10 +14,14 @@ type GptConfig struct {
 		ApiKey string `mapstructure:"api_key"` //api-key
 	}
 	Azure struct {
-		EndPoint     string `mapstructure:"end_point"`     //终结点，在控制台查询
-		ApiKey       string `mapstructure:"api_key"`       //api-key
-		DeploymentID string `mapstructure:"deployment_id"` //模型部署的名称
-		ApiVersion   string `mapstructure:"api_version"`   //要用于此操作的 API 版本
+		EndPoint     string   `mapstructure:"end_point"`     //终结点，在控制台查询
+		ApiKey       string   `mapstructure:"api_key"`       //api-key
+		DeploymentID string   `mapstructure:"deployment_id"` //模型部署的名称
+		ApiVersion   string   `mapstructure:"api_version"`   //要用于此操作的 API 版本
+		Memory       struct { //azure记忆相关配置，生成embedding使用
+			DeploymentId string `mapstructure:"deployment_id"` //部署id
+			ApiVersion   string `mapstructure:"api_version"`   //api版本
+		}
 	}
 	General struct {
 		Model            string  //使用的模型
@@ -67,7 +71,7 @@ func InitGPTConfig() {
 		if err != nil {
 			log.Println(err)
 		}
-		log.Println("配置文件不存在, 已自动生成配置文件, 请修改配置文件后再次运行程序, 5秒后退出程序...")
+		log.Println("配置文件不存在, 已自动生成配置文件, 请修改配置文件后再次运行程序, 5秒后退出程序...但是如果你看到的是这一条，我建议你去github上把它的配置文件下下来，如果你要用azure的embedding功能的话")
 		time.Sleep(5 * time.Second)
 		os.Exit(0)
 	}

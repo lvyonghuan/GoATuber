@@ -1,10 +1,9 @@
 package memory_gpt
 
 import (
-	"log"
-
 	"GoTuber/MEMORY/memory/embedding"
 	"GoTuber/MEMORY/memory/vector_database/pinecone"
+	"GoTuber/NLP/config"
 )
 
 type Chat struct {
@@ -18,7 +17,15 @@ type Chat struct {
 //TODO:优化记忆逻辑
 
 func (chat Chat) StoreMessage() {
-	vector := embedding.OpenaiEmbedding(chat.Human)
+	var vector []float32
+	//判断使用哪一个嵌入器
+	if config.NLPCfg.Nlp.UseGPT {
+		vector = embedding.OpenaiEmbedding(chat.Human)
+	} else if config.NLPCfg.Nlp.UseAzureGPT {
+		vector = embedding.AzureOpenaiEmbedding(chat.Human)
+	} else {
+		return
+	}
 	if vector == nil {
 		return
 	}
@@ -34,7 +41,15 @@ func (chat Chat) StoreMessage() {
 }
 
 func (chat Chat) GetMemory() (humanText, aiText, user string) {
-	vector := embedding.OpenaiEmbedding(chat.Human)
+	var vector []float32
+	//判断使用哪一个嵌入器
+	if config.NLPCfg.Nlp.UseGPT {
+		vector = embedding.OpenaiEmbedding(chat.Human)
+	} else if config.NLPCfg.Nlp.UseAzureGPT {
+		vector = embedding.AzureOpenaiEmbedding(chat.Human)
+	} else {
+		return "", "", ""
+	}
 	if vector == nil {
 		return "", "", ""
 	}
