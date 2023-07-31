@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"GoTuber/CHAT"
 	"GoTuber/MEMORY"
 	"GoTuber/MESSAGE"
@@ -10,7 +12,6 @@ import (
 	"GoTuber/SPEECH"
 	"GoTuber/frontend/live2d_backend"
 	"GoTuber/proxy"
-	"log"
 )
 
 func main() {

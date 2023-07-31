@@ -1,10 +1,11 @@
 package bilichat
 
 import (
-	"GoTuber/CHAT/bilichat/service"
-	config2 "GoTuber/CHAT/config"
 	"os"
 	"os/signal"
+
+	"GoTuber/CHAT/bilichat/service"
+	config2 "GoTuber/CHAT/config"
 )
 
 func InitBiliChat() {

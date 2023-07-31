@@ -1,12 +1,13 @@
 package direct_input
 
 import (
-	"GoTuber/MESSAGE"
-	"GoTuber/MESSAGE/model"
 	"bufio"
 	"log"
 	"os"
 	"strings"
+
+	"GoTuber/MESSAGE"
+	"GoTuber/MESSAGE/model"
 )
 
 func GetMessage() {

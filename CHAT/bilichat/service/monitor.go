@@ -1,12 +1,13 @@
 package service
 
 import (
-	config2 "GoTuber/CHAT/config"
-	"GoTuber/MESSAGE"
-	"GoTuber/MESSAGE/model"
 	"log"
 	"sync"
 	"time"
+
+	config2 "GoTuber/CHAT/config"
+	"GoTuber/MESSAGE"
+	"GoTuber/MESSAGE/model"
 )
 
 type Monitor struct {
