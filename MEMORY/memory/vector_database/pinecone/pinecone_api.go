@@ -1,7 +1,6 @@
 package pinecone
 
 import (
-	"GoTuber/proxy"
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
@@ -10,6 +9,8 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+
+	"GoTuber/proxy"
 )
 
 // Input 传入结构体

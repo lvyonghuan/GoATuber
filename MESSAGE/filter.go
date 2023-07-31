@@ -1,9 +1,10 @@
 package MESSAGE
 
 import (
+	"log"
+
 	"GoTuber/MESSAGE/filter"
 	"GoTuber/MESSAGE/model"
-	"log"
 )
 
 // FILTER 过滤器

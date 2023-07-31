@@ -1,10 +1,11 @@
 package MEMORY
 
 import (
-	"github.com/spf13/viper"
 	"log"
 	"os"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 type memoryConfig struct {

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"GoTuber/CHAT/model"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -9,6 +8,8 @@ import (
 	"net/url"
 	"strconv"
 	"time"
+
+	"GoTuber/CHAT/model"
 
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
