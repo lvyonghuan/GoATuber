@@ -4,7 +4,7 @@
 
 思路如下。
 
-![GAtuber 后端重构.png](./img/GAtuber 后端重构.png)
+![](./img/GAtuber 后端重构.png)
  
  快速构建属于你的AI主播。
 
