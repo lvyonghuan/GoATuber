@@ -1,4 +1,12 @@
-﻿# GO!Atuber
+# 公告
+2.0版本前后端对接已完成。不过目前可用的只有azure openai的工具链，以后会逐步完善。可用百度如何使用学生邮箱申请azure免费额度。
+
+请移步[GoAtuber](https://github.com/Fun-AI-Research-Center/GoATuber)。
+
+同时开发者可以访问前端代码[GoATuber-frontend](https://github.com/Fun-AI-Research-Center/GoATuber-frontend)。
+
+---
+ # GO!Atuber
 
 *重构中，预计会开新仓库。~~但是重构完成之前，本项目会持续维护~~。重构大概和前端无关，只是重构后端的逻辑。*
 
