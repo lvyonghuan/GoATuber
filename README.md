@@ -1,9 +1,13 @@
 # 公告
-2.0版本前后端对接已完成。不过目前可用的只有azure openai的工具链，以后会逐步完善。可用百度如何使用学生邮箱申请azure免费额度。
+2.0版本已release。
 
 请移步[GoAtuber](https://github.com/Fun-AI-Research-Center/GoATuber)。
 
 同时开发者可以访问前端代码[GoATuber-frontend](https://github.com/Fun-AI-Research-Center/GoATuber-frontend)。
+
+2.0版本配备了GUI控制器。这是控制器的源码页：[GoAtuber-Control](https://github.com/Fun-AI-Research-Center/GoAtuber-Control-temp)。
+
+最后，关注、加入[Fun AI研究中心](https://github.com/Fun-AI-Research-Center)谢谢喵。
 
 ---
  # GO!Atuber
